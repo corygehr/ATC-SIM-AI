@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
-using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 
 namespace ATC_SIM_AI
@@ -58,9 +54,11 @@ namespace ATC_SIM_AI
         /// <param name="text">Text to Enter</param>
         public static void EnterTextSubmitForm(IWebDriver driver, String element, String text)
         {
-            // Get the textbox element, enter text, and submit
+            // Get the textbox element
             IWebElement textBox = driver.FindElement(By.Name(element));
-            textBox.SendKeys(text);
+            // To speed up input times, use JS as a workaround
+            (driver as IJavaScriptExecutor).ExecuteScript(
+                "document.getElementsByName('txtClearance')[0].setAttribute('value', '" + text + "')");
             textBox.Submit();
         }
 

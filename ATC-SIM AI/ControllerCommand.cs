@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
-using OpenQA.Selenium.IE;
-using OpenQA.Selenium.Support.UI;
 
 namespace ATC_SIM_AI
 {
@@ -19,15 +13,6 @@ namespace ATC_SIM_AI
         private string _explicitCommand;
         private Flight _flight;
         private string _value;
-
-        private enum Commands {
-            ALTITUDE = 'c',
-            DESTINATION = 'c',
-            LAND = 'l',
-            TAKEOFF = 't',
-            TURN = 'c',
-            SPEED = 's'
-        }
 
         /// <summary>
         /// Constructor for the ControllerCommand class
@@ -55,7 +40,7 @@ namespace ATC_SIM_AI
         /// <param name="altitude">New altitude</param>
         public void ChangeAltitude(int altitude)
         {
-            this._action = Commands.ALTITUDE.ToString();
+            this._action = SimInstruction.ALTITUDE.ToString();
             this._value = altitude.ToString();
         }
 
@@ -63,9 +48,9 @@ namespace ATC_SIM_AI
         /// Sets destination change information for this command
         /// </summary>
         /// <param name="destination">New destination</param>
-        public void ChangeDestination(Navpoint destination)
+        public void ChangeDestination(Waypoint destination)
         {
-            this._action = Commands.DESTINATION.ToString();
+            this._action = SimInstruction.DESTINATION.ToString();
             this._value = destination.Name;
         }
 
@@ -75,7 +60,7 @@ namespace ATC_SIM_AI
         /// <param name="speed">New speed</param>
         public void ChangeSpeed(int speed)
         {
-            this._action = Commands.SPEED.ToString();
+            this._action = SimInstruction.SPEED.ToString();
             this._value = speed.ToString();
         }
 
@@ -111,7 +96,7 @@ namespace ATC_SIM_AI
         public void Execute()
         {
             CompileCommand();
-            UIHelper.EnterTextSubmitForm(this._driver, "", this._command);
+            UIHelper.EnterTextSubmitForm(this._driver, "txtClearance", this._command);
             this._executed = true;
         }
 
@@ -121,7 +106,7 @@ namespace ATC_SIM_AI
         /// <param name="runway">Landing Runway</param>
         public void Land(Runway runway)
         {
-            this._action = Commands.LAND.ToString();
+            this._action = SimInstruction.LAND.ToString();
             this._value = runway.Name;
         }
 
@@ -138,7 +123,7 @@ namespace ATC_SIM_AI
         /// </summary>
         /// <param name="runway">Takeoff Runway</param>
         public void Takeoff(Runway runway) {
-            this._action = Commands.TAKEOFF.ToString();
+            this._action = SimInstruction.TAKEOFF.ToString();
             this._value = runway.Name;
         }
 

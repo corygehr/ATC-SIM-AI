@@ -1,37 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace ATC_SIM_AI
 {
-    abstract class Navpoint
+    abstract class Waypoint
     {
         private Location _location;
         private string _name;
 
         /// <summary>
-        /// Default constructor for a Navpoint object
+        /// Default constructor for a Waypoint object
         /// </summary>
-        /// <param name="name">Navpoint name</param>
-        /// <param name="x">Navpoint x location</param>
-        /// <param name="y">Navpoint y location</param>
-        public Navpoint(string name, int x, int y)
+        /// <param name="name">Waypoint name</param>
+        /// <param name="x">Waypoint x location</param>
+        /// <param name="y">Waypoint y location</param>
+        public Waypoint(string name, double x, double y)
         {
-            this._location = new Location(x, y);
             this._name = name;
+            this._location = new Location(x, y);
         }
 
         /// <summary>
-        /// Constructor for a Navpoint object that allows Location object passing
+        /// Constructor for a Waypoint object that allows Location object passing
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="location"></param>
-        public Navpoint(string name, Location location)
+        /// <param name="name">Waypoint name</param>
+        /// <param name="location">Waypoint Location object</param>
+        public Waypoint(string name, Location location)
         {
-            this._location = location;
             this._name = name;
+            this._location = location;
         }
 
         /// <summary>
