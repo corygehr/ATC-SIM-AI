@@ -4,7 +4,9 @@ namespace ATC_SIM_AI
 {
     class Flight
     {
+        private AircraftModel _modelType;
         private int _altitude;
+        private FlightPhase _type;
         private Waypoint _destination;
         private int _heading;
         private Location _location;
@@ -16,14 +18,16 @@ namespace ATC_SIM_AI
         /// Constructor for the Flight class
         /// </summary>
         /// <param name="name">Flight Name</param>
+        /// <param name="type">Flight Type</param>
         /// <param name="dest">Destination Navpoint</param>
         /// <param name="altitude">Current altitude</param>
         /// <param name="speed">Current speed</param>
         /// <param name="heading">Current heading</param>
         /// <param name="location">Current Location</param>
-        public Flight(string name, ref Waypoint dest, int altitude = 0, int speed = 0, int heading = 0, Location location = null)
+        public Flight(string name, FlightPhase type, ref Waypoint dest, int altitude = 0, int speed = 0, int heading = 0, Location location = null)
         {
             this._name = name;
+            this._type = type;
             this._destination = dest;
             this._altitude = altitude;
             this._speed = speed;
@@ -36,15 +40,17 @@ namespace ATC_SIM_AI
         /// Constructor for the Flight class that allows creation with explicit X and Y values
         /// </summary>
         /// <param name="name">Flight Name</param>
+        /// <param name="type">Flight Type</param>
         /// <param name="dest">Destination Navpoint</param>
         /// <param name="altitude">Current altitude</param>
         /// <param name="speed">Current speed</param>
         /// <param name="heading">Current heading</param>
         /// <param name="x">Current Location on the X-axis</param>
         /// <param name="y">Current Location on the Y-axis</param>
-        public Flight(string name, ref Waypoint dest, int altitude = 0, int speed = 0, int heading = 0, double x = 0, double y = 0)
+        public Flight(string name, FlightPhase type, ref Waypoint dest, int altitude = 0, int speed = 0, int heading = 0, double x = 0, double y = 0)
         {
             this._name = name;
+            this._type = type;
             this._destination = dest;
             this._altitude = altitude;
             this._speed = speed;

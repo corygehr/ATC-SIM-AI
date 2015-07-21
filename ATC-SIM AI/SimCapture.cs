@@ -26,19 +26,8 @@ namespace ATC_SIM_AI
         /// <returns>Array of Status (0=Landings, 1=Handoffs, 2=Improper Exits, 3=Missed Approaches, 4=Violation Seconds</returns>
         private int[] CaptureStats()
         {
-            int[] stats = new int[5];
-
-            object result = _js.ExecuteScript("return G_arrScore");
-            ReadOnlyCollection<object> statsArray = (ReadOnlyCollection<object>)result;
-            
-            // Cast the objects as ints and place into array
-            stats[0] = Convert.ToInt32(statsArray[0]);
-            stats[1] = Convert.ToInt32(statsArray[1]);
-            stats[2] = Convert.ToInt32(statsArray[2]);
-            stats[3] = Convert.ToInt32(statsArray[3]);
-            stats[4] = Convert.ToInt32(statsArray[4]);
-
-            return stats;
+            JSArray rawStats = new JSArray(this.FetchRawJSVariable("G_arrScore"));
+            return rawStats.ParseToInt();
         }
 
         /// <summary>

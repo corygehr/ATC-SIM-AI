@@ -1,7 +1,7 @@
 ﻿
 namespace ATC_SIM_AI
 {
-    abstract class Waypoint
+    class Waypoint
     {
         private Location _location;
         private string _name;
