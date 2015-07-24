@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace ATC_SIM_AI
+namespace AtcSimController.SiteReflection.SimConnector
 {
     /// <summary>
     /// Provides advanced parsing for raw arrays taken from Javascript
@@ -13,7 +13,7 @@ namespace ATC_SIM_AI
         /// <summary>
         /// Constructor for the JSArray class
         /// </summary>
-        /// <param name="array"></param>
+        /// <param name="array">Raw result from JS</param>
         public JSArray(object array)
         {
             // Parse raw JS Array into ROC of 'object' type (very abstract for all cases)
@@ -50,6 +50,14 @@ namespace ATC_SIM_AI
             }
 
             return clean;
+        }
+
+        public ReadOnlyCollection<object> RawData
+        {
+            get
+            {
+                return this._raw;
+            }
         }
     }
 }

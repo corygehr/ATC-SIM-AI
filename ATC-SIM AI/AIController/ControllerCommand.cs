@@ -1,7 +1,9 @@
-﻿using System;
+﻿using AtcSimController.SiteReflection;
+using AtcSimController.SiteReflection.SimConnector;
+using System;
 using OpenQA.Selenium;
 
-namespace ATC_SIM_AI
+namespace AtcSimController.AIController
 {
     class ControllerCommand
     {
@@ -40,7 +42,7 @@ namespace ATC_SIM_AI
         /// <param name="altitude">New altitude</param>
         public void ChangeAltitude(int altitude)
         {
-            this._action = SimInstruction.ALTITUDE.ToString();
+            this._action = Instruction.ALTITUDE.ToString();
             this._value = altitude.ToString();
         }
 
@@ -50,7 +52,7 @@ namespace ATC_SIM_AI
         /// <param name="destination">New destination</param>
         public void ChangeDestination(Waypoint destination)
         {
-            this._action = SimInstruction.DESTINATION.ToString();
+            this._action = Instruction.DESTINATION.ToString();
             this._value = destination.Name;
         }
 
@@ -60,7 +62,7 @@ namespace ATC_SIM_AI
         /// <param name="speed">New speed</param>
         public void ChangeSpeed(int speed)
         {
-            this._action = SimInstruction.SPEED.ToString();
+            this._action = Instruction.SPEED.ToString();
             this._value = speed.ToString();
         }
 
@@ -103,10 +105,10 @@ namespace ATC_SIM_AI
         /// <summary>
         /// Sets landing information for this command
         /// </summary>
-        /// <param name="runway">Landing Runway</param>
-        public void Land(Runway runway)
+        /// <param name="runway">Landing Runway Waypoint</param>
+        public void Land(Waypoint runway)
         {
-            this._action = SimInstruction.LAND.ToString();
+            this._action = Instruction.LAND.ToString();
             this._value = runway.Name;
         }
 
@@ -121,9 +123,9 @@ namespace ATC_SIM_AI
         /// <summary>
         /// Sets takeoff information for this command
         /// </summary>
-        /// <param name="runway">Takeoff Runway</param>
-        public void Takeoff(Runway runway) {
-            this._action = SimInstruction.TAKEOFF.ToString();
+        /// <param name="runway">Takeoff Runway Waypoint</param>
+        public void Takeoff(Waypoint runway) {
+            this._action = Instruction.TAKEOFF.ToString();
             this._value = runway.Name;
         }
 

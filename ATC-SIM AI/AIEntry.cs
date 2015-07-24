@@ -1,9 +1,11 @@
-﻿using System;
+﻿using AtcSimController.AIController;
+using AtcSimController.SiteReflection.SimConnector;
+using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 
-namespace ATC_SIM_AI
+namespace AtcSimController
 {
     class AIEntry
     {
@@ -12,21 +14,29 @@ namespace ATC_SIM_AI
             // Application Start
             Console.WriteLine("ATC-SIM AI By Cory Gehr (2015)\n");
 
-            if (args.Length == 4)
+            if (args.Length == 5)
             {
                 // Setup for the ATC-SIM Environment
                 Console.WriteLine("Starting Selenium Server...\n");
 
-                // Prepare IE settings
-                InternetExplorerOptions ieOptions = new InternetExplorerOptions
-                {
-                    IgnoreZoomLevel = true,
-                    InitialBrowserUrl = "http://atc-sim.com/",
-                    PageLoadStrategy = InternetExplorerPageLoadStrategy.Eager // Wait for pages to be 'complete'
-                };
+                IWebDriver driver;
 
-                // Create a new instance of the IE WebDriver
-                IWebDriver driver = new InternetExplorerDriver(ieOptions);
+                switch (args[0])
+                {
+                    default:
+                    case "ie":
+                        // Prepare IE settings
+                        InternetExplorerOptions ieOptions = new InternetExplorerOptions
+                        {
+                            IgnoreZoomLevel = true,
+                            InitialBrowserUrl = "http://atc-sim.com/",
+                            PageLoadStrategy = InternetExplorerPageLoadStrategy.Eager // Wait for pages to be 'complete'
+                        };
+
+                        // Create a new instance of the IE WebDriver
+                        driver = new InternetExplorerDriver(ieOptions);
+                        break;
+                }
 
                 // Wait for the page to load
                 WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
@@ -50,21 +60,21 @@ namespace ATC_SIM_AI
                 {
                     /// AIRPORT
                     // Change the value of the airport selector
-                    UIHelper.ChangeDropDownByValue(ref driver, "selAirport", args[0]);
+                    UIHelper.ChangeDropDownByValue(ref driver, "selAirport", args[1]);
 
                     /// IATA Preference
-                    if (Boolean.Parse(args[1]))
+                    if (Boolean.Parse(args[2]))
                     {
                         UIHelper.ChangeRadioByValue(ref driver, "rdoICAOorIATA", "IATA");
                     }
 
                     /// WIND DIRECTION
                     // Get element for wind direction
-                    UIHelper.ChangeDropDownByValue(ref driver, "WindChance", args[2]);
+                    UIHelper.ChangeDropDownByValue(ref driver, "WindChance", args[3]);
 
                     // REALISM
                     string playMoveValue;
-                    switch (args[3])
+                    switch (args[4])
                     {
                         case "easy":
                             playMoveValue = "1";

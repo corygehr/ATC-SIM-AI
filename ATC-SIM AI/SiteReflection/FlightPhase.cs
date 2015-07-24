@@ -1,4 +1,4 @@
-﻿namespace ATC_SIM_AI
+﻿namespace AtcSimController.SiteReflection
 {
     public enum FlightPhase
     {

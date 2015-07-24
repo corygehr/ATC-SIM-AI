@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ATC_SIM_AI
+namespace AtcSimController.SiteReflection
 {
     class AircraftModel
     {

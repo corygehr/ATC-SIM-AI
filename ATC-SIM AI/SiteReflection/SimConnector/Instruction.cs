@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ATC_SIM_AI
+﻿namespace AtcSimController.SiteReflection.SimConnector
 {
     /// <summary>
     /// Contains all possible sim instructions
     /// </summary>
-    enum SimInstruction
+    enum Instruction
     {
         ALTITUDE = 'c',
         DESTINATION = 'c',

@@ -1,5 +1,4 @@
-﻿
-namespace ATC_SIM_AI
+﻿namespace AtcSimController.SiteReflection
 {
     class Location
     {

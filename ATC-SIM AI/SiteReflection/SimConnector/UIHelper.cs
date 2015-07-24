@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace ATC_SIM_AI
+namespace AtcSimController.SiteReflection.SimConnector
 {
     class UIHelper
     {
