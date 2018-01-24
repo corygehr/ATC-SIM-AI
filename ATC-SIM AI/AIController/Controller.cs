@@ -2,7 +2,6 @@
 using AtcSimController.SiteReflection.SimConnector;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using OpenQA.Selenium;
 
 namespace AtcSimController.AIController

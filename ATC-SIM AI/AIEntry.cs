@@ -4,6 +4,7 @@ using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Chrome;
 
 namespace AtcSimController
 {
@@ -23,6 +24,13 @@ namespace AtcSimController
 
                 switch (args[0])
                 {
+                    case "chrome":
+                        // Prepare Chrome settings
+                        driver = new ChromeDriver();
+                        driver.Url = "http://atc-sim.com/";
+                        driver.Navigate();
+                        break;
+
                     default:
                     case "ie":
                         // Prepare IE settings
@@ -30,7 +38,7 @@ namespace AtcSimController
                         {
                             IgnoreZoomLevel = true,
                             InitialBrowserUrl = "http://atc-sim.com/",
-                            PageLoadStrategy = InternetExplorerPageLoadStrategy.Eager // Wait for pages to be 'complete'
+                            PageLoadStrategy = PageLoadStrategy.Eager // Wait for pages to be 'complete'
                         };
 
                         // Create a new instance of the IE WebDriver
@@ -145,7 +153,7 @@ namespace AtcSimController
                 // Output usage options
                 Console.WriteLine("Usage:\n\tBROWSER AIRPORT AIRLINEIATAOPT WIND REALISM\n\t(All arguments required)");
                 Console.WriteLine("Arguments:");
-                Console.WriteLine("\tBROWSER - Browser to use (ie); Internet Explorer is only supported right now");
+                Console.WriteLine("\tBROWSER - Browser to use (chrome, ie)");
                 Console.WriteLine("\tAIRPORT - ICAO Code for Target Airport (See website for list)");
                 Console.WriteLine("\tAIRLINEIATAOPT - Use IATA Codes for Airlines (True or False)");
                 Console.WriteLine("\tWIND - Wind Change Frequency (0, 10, 25, 50, 75, 100)");
