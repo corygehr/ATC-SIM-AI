@@ -143,8 +143,9 @@ namespace AtcSimController
             else
             {
                 // Output usage options
-                Console.WriteLine("Usage:\n\tAIRPORT AIRLINEIATAOPT WIND REALISM\n\t(All arguments required)");
+                Console.WriteLine("Usage:\n\tBROWSER AIRPORT AIRLINEIATAOPT WIND REALISM\n\t(All arguments required)");
                 Console.WriteLine("Arguments:");
+                Console.WriteLine("\tBROWSER - Browser to use (ie); Internet Explorer is only supported right now");
                 Console.WriteLine("\tAIRPORT - ICAO Code for Target Airport (See website for list)");
                 Console.WriteLine("\tAIRLINEIATAOPT - Use IATA Codes for Airlines (True or False)");
                 Console.WriteLine("\tWIND - Wind Change Frequency (0, 10, 25, 50, 75, 100)");

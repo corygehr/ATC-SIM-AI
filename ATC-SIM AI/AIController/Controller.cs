@@ -116,28 +116,28 @@ namespace AtcSimController.AIController
                 string flightNum = flt.Key;
 
                 // Parse out flight data to ReadOnlyCollection
-                ReadOnlyCollection<object> data = (ReadOnlyCollection<object>) flt.Value;
+                IDictionary<string, object> data = (IDictionary<string, object>) flt.Value;
 
                 // Convert values to proper types and add new flight to the array
-                string aircraft = Convert.ToString(data[0]);
-                int modelInd = Convert.ToInt32(data[1]);
-                int x = Convert.ToInt32(data[2]);
-                int y = Convert.ToInt32(data[3]);
-                int z = Convert.ToInt32(data[4]);
-                int hdg = Convert.ToInt32(data[5]);
-                int spd = Convert.ToInt32(data[6]);
-                int fltMode = Convert.ToInt32(data[7]);
-                int hdgClr = Convert.ToInt32(data[8]);
-                int altClr = Convert.ToInt32(data[9]);
-                int spdClr = Convert.ToInt32(data[10]);
-                string navClr = Convert.ToString(data[11]);
-                int navClrId = Convert.ToInt32(data[12]);
-                int dest = Convert.ToInt32(data[13]);
-                int lr = Convert.ToInt32(data[14]);
-                int timerSec = Convert.ToInt32(data[15]);
-                char timerMode = Convert.ToChar(data[16]);
-                int expedite = Convert.ToInt32(data[17]);
-                bool conflict = Convert.ToBoolean(data[18]);
+                string aircraft = Convert.ToString(data["0"]);
+                int modelInd = Convert.ToInt32(data["1"]);
+                int x = Convert.ToInt32(data["2"]);
+                int y = Convert.ToInt32(data["3"]);
+                int z = Convert.ToInt32(data["4"]);
+                int hdg = Convert.ToInt32(data["5"]);
+                int spd = Convert.ToInt32(data["6"]);
+                int fltMode = Convert.ToInt32(data["7"]);
+                int hdgClr = Convert.ToInt32(data["8"]);
+                int altClr = Convert.ToInt32(data["9"]);
+                int spdClr = Convert.ToInt32(data["10"]);
+                string navClr = Convert.ToString(data["11"]);
+                int navClrId = Convert.ToInt32(data["12"]);
+                int dest = Convert.ToInt32(data["13"]);
+                int lr = Convert.ToInt32(data["14"]);
+                int timerSec = Convert.ToInt32(data["15"]);
+                char timerMode = Convert.ToChar(data["16"]);
+                int expedite = Convert.ToInt32(data["17"]);
+                bool conflict = Convert.ToBoolean(data["18"]);
 
                 Waypoint destination = this._env.Waypoints[dest];
 
