@@ -53,6 +53,11 @@
     <Compile Include="AIController\Router.cs" />
     <Compile Include="AIController\RouteTarget.cs" />
     <Compile Include="AIEntry.cs" />
+    <Compile Include="Resources\Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
     <Compile Include="SiteReflection\AircraftModel.cs" />
     <Compile Include="AIController\Controller.cs" />
     <Compile Include="AIController\ControllerCommand.cs" />
@@ -62,6 +67,16 @@
     <Compile Include="SiteReflection\Location.cs" />
     <Compile Include="AIController\RoutePhase.cs" />
     <Compile Include="SiteReflection\Environment.cs" />
+    <Compile Include="SiteReflection\SimConnector\Resources\FormElements.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FormElements.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SiteReflection\SimConnector\Resources\JSVariables.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JSVariables.resx</DependentUpon>
+    </Compile>
     <Compile Include="SiteReflection\Statistics.cs" />
     <Compile Include="SiteReflection\Waypoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,6 +102,20 @@
       <Link>IEDriverServer.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SiteReflection\SimConnector\Resources\FormElements.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FormElements.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SiteReflection\SimConnector\Resources\JSVariables.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>JSVariables.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

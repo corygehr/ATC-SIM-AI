@@ -1,6 +1,6 @@
 ﻿namespace AtcSimController.SiteReflection
 {
-    class Statistics
+    sealed class Statistics
     {
         private int _landings;
         private int _handoffs;

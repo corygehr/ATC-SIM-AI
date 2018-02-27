@@ -3,6 +3,8 @@ using AtcSimController.SiteReflection.SimConnector;
 using System;
 using System.Collections.Generic;
 using OpenQA.Selenium;
+using AtcSimController.Resources;
+using AtcSimController.SiteReflection.SimConnector.Resources;
 
 namespace AtcSimController.AIController
 {
@@ -32,23 +34,23 @@ namespace AtcSimController.AIController
         public void Run()
         {
             // Environment setup
-            Console.WriteLine("Setting up controller environment...");
+            Console.WriteLine(String.Format("{0}...", Messages.ENVIRONMENT_SETUP));
 
             // Create our statistics object
             this._stats = new Statistics();
 
             // Set the 'Scale' command to show edge markers and circles
-            new ControllerCommand(this._driver, "SCALE").Execute();
+            new ControllerCommand(Instruction.SCALE.ToString()).Execute(this._driver);
 
             // Create a capture object
             BrowserCapture capture = new BrowserCapture(this._driver);
 
             // Fetch waypoints, ac models
-            this._env = new AtcSimController.SiteReflection.Environment(this.FetchWaypoints(ref capture));
+            this._env = new SiteReflection.Environment(this.FetchWaypoints(ref capture));
             this._models = this.FetchAircraftModels(ref capture);
 
             // Now we begin the main simulator loop
-            Console.WriteLine("\n--Controller Active--\n");
+            Console.WriteLine(String.Format("\n--{0}--\n", Messages.CONTROLLER_READY));
 
             while(capture.SimActive())
             {
@@ -67,7 +69,7 @@ namespace AtcSimController.AIController
         }
 
         /// <summary>
-        /// Fetches a list of all aircraft models used
+        /// Fetches a list of all aircraft models used in the simulation
         /// </summary>
         /// <param name="capture">BrowserCapture object</param>
         /// <returns>List of Aircraft Models</returns>
@@ -76,7 +78,7 @@ namespace AtcSimController.AIController
             List<AircraftModel> models = new List<AircraftModel>();
 
             // Get list of models
-            JSArray rawModels = new JSArray(capture.FetchRawJSVariable("G_arrModelSpeeds"));
+            JSArray rawModels = new JSArray(capture.FetchRawJSVariable(JSVariables.AIRCRAFT));
 
             // Parse into a list
             for (int i = 0; i < rawModels.RawData.Count; i++)
@@ -106,7 +108,7 @@ namespace AtcSimController.AIController
 
             // Get list of flights
             //JSArray rawFlts = new JSArray(capture.FetchRawJSVariable("G_objPlanes"));
-            Dictionary<string, object> rawFlts = (Dictionary<string, object>)capture.FetchRawJSVariable("G_objPlanes");
+            Dictionary<string, object> rawFlts = (Dictionary<string, object>)capture.FetchRawJSVariable(JSVariables.FLIGHTS);
             
             // Parse into a list
             foreach(var flt in rawFlts)
@@ -168,7 +170,7 @@ namespace AtcSimController.AIController
             List<Waypoint> wpts = new List<Waypoint>();
 
             // Get list of waypoints
-            JSArray rawWpts = new JSArray(capture.FetchRawJSVariable("G_arrNavObjects"));
+            JSArray rawWpts = new JSArray(capture.FetchRawJSVariable(JSVariables.WAYPOINTS));
 
             // Parse into a list
             for(int i=0; i<rawWpts.RawData.Count; i++)
@@ -204,7 +206,7 @@ namespace AtcSimController.AIController
         /// <param name="capture">BrowserCapture object</param>
         private void RefreshStats(ref BrowserCapture capture)
         {
-            JSArray rawStats = new JSArray(capture.FetchRawJSVariable("G_arrScore"));
+            JSArray rawStats = new JSArray(capture.FetchRawJSVariable(JSVariables.SCORE));
             this._stats.UpdateStatistics(rawStats.ParseToInt());
         }
 
@@ -215,8 +217,8 @@ namespace AtcSimController.AIController
         private void UpdateEnvironment(ref BrowserCapture capture)
         {
             // Provide wind and active runways
-            int wind = Convert.ToInt32(capture.FetchRawJSVariable("intWind"));
-            int[] activeRunways = new JSArray(capture.FetchRawJSVariable("G_arrActiveRunways")).ParseToInt();
+            int wind = Convert.ToInt32(capture.FetchRawJSVariable(JSVariables.WIND_HEADING));
+            int[] activeRunways = new JSArray(capture.FetchRawJSVariable(JSVariables.ACTIVE_RUNWAYS)).ParseToInt();
 
             // Now actually update the environment
             this._env.Update(wind, activeRunways);

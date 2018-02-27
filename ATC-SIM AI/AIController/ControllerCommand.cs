@@ -2,13 +2,14 @@
 using AtcSimController.SiteReflection.SimConnector;
 using System;
 using OpenQA.Selenium;
+using AtcSimController.SiteReflection.SimConnector.Resources;
+using AtcSimController.Resources;
 
 namespace AtcSimController.AIController
 {
     class ControllerCommand
     {
-        private string _action;
-        private IWebDriver _driver;
+        private Instruction _action;
         private string _command;
         private Boolean _executed = false;
         private Boolean _expedite = false;
@@ -17,23 +18,27 @@ namespace AtcSimController.AIController
         private string _value;
 
         /// <summary>
-        /// Constructor for the ControllerCommand class
+        /// Constructor for the <see cref="ControllerCommand"/> class
         /// </summary>
-        /// <param name="driver">Current Web Driver</param>
-        public ControllerCommand(IWebDriver driver)
+        public ControllerCommand()
         {
-            this._driver = driver;
         }
 
         /// <summary>
         /// Constructor that allows explicit command specification
         /// </summary>
-        /// <param name="driver">Current Web Driver</param>
         /// <param name="command">Full Command Text</param>
-        public ControllerCommand(IWebDriver driver, string command)
+        public ControllerCommand(string command)
         {
-            this._driver = driver;
             this._explicitCommand = command;
+        }
+
+        /// <summary>
+        /// Aborts the current landing or takeoff process for the aircraft
+        /// </summary>
+        public void Abort()
+        {
+            this._action = Instruction.ABORT;
         }
 
         /// <summary>
@@ -42,7 +47,7 @@ namespace AtcSimController.AIController
         /// <param name="altitude">New altitude</param>
         public void ChangeAltitude(int altitude)
         {
-            this._action = Instruction.ALTITUDE.ToString();
+            this._action = Instruction.ALTITUDE;
             this._value = altitude.ToString();
         }
 
@@ -52,7 +57,7 @@ namespace AtcSimController.AIController
         /// <param name="destination">New destination</param>
         public void ChangeDestination(Waypoint destination)
         {
-            this._action = Instruction.DESTINATION.ToString();
+            this._action = Instruction.DESTINATION;
             this._value = destination.Name;
         }
 
@@ -62,7 +67,7 @@ namespace AtcSimController.AIController
         /// <param name="speed">New speed</param>
         public void ChangeSpeed(int speed)
         {
-            this._action = Instruction.SPEED.ToString();
+            this._action = Instruction.SPEED;
             this._value = speed.ToString();
         }
 
@@ -71,7 +76,7 @@ namespace AtcSimController.AIController
         /// </summary>
         private void CompileCommand()
         {
-            if (this._explicitCommand != String.Empty)
+            if (!String.IsNullOrEmpty(this._explicitCommand))
             {
                 // An explicit command was issued
                 this._command = this._explicitCommand;
@@ -79,26 +84,27 @@ namespace AtcSimController.AIController
             else
             {
                 // Create the command using the values provided
-
-                // If expedite was specified, add the Expedite option at the end
-                string expText = "";
-                if (this._expedite)
+                this._command = String.Join(" ", _flight.Name, _action, _value);
+                
+                // Expedite command (if requested)
+                if (this._expedite && _action != Instruction.ABORT)
                 {
-                    expText = "x";
+                    this._command = String.Join(" ", this._command, Instruction.EXPEDITE);
                 }
-
-                // Return the created string
-                this._command = String.Join(" ", _flight.Name, _action, _value, expText);
+                else if(this._expedite && this._action == Instruction.ABORT)
+                {
+                    Console.WriteLine("[Alert]");
+                }
             }
         }
 
         /// <summary>
         /// Executes the command
         /// </summary>
-        public void Execute()
+        public void Execute(IWebDriver driver)
         {
             CompileCommand();
-            UIHelper.EnterTextSubmitForm(this._driver, "txtClearance", this._command);
+            UIHelper.EnterTextSubmitForm(driver, FormElements.CLEARANCE_TEXTBOX_ID, this._command);
             this._executed = true;
         }
 
@@ -108,7 +114,7 @@ namespace AtcSimController.AIController
         /// <param name="runway">Landing Runway Waypoint</param>
         public void Land(Waypoint runway)
         {
-            this._action = Instruction.LAND.ToString();
+            this._action = Instruction.LAND;
             this._value = runway.Name;
         }
 
@@ -116,7 +122,8 @@ namespace AtcSimController.AIController
         /// Sets the target flight for this command
         /// </summary>
         /// <param name="flight">Flight object</param>
-        public void SetFlight(ref Flight flight) {
+        public void SetFlight(ref Flight flight)
+        {
             this._flight = flight;
         }
 
@@ -124,23 +131,26 @@ namespace AtcSimController.AIController
         /// Sets takeoff information for this command
         /// </summary>
         /// <param name="runway">Takeoff Runway Waypoint</param>
-        public void Takeoff(Waypoint runway) {
-            this._action = Instruction.TAKEOFF.ToString();
+        public void Takeoff(Waypoint runway)
+        {
+            this._action = Instruction.TAKEOFF;
             this._value = runway.Name;
         }
 
         /// <summary>
         /// Returns the text of the command (for debugging only)
         /// </summary>
-        public string CommandText {
-            get {
+        public string CommandText
+        {
+            get
+            {
                 CompileCommand();
                 string output = this._command;
 
                 // Display [EXPLICIT] if the command was explicitly specified
                 if (this._explicitCommand != String.Empty)
                 {
-                    String.Join(" ", "[EXPLICIT]", output);       
+                    output = String.Format(Messages.EXPLICIT_BASE, output);
                 }
 
                 return output;
@@ -150,8 +160,10 @@ namespace AtcSimController.AIController
         /// <summary>
         /// Returns true if the command has already been executed
         /// </summary>
-        public Boolean Executed {
-            get {
+        public Boolean Executed
+        {
+            get
+            {
                 return this._executed;
             }
         }

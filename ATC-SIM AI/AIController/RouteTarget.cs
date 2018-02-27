@@ -2,6 +2,9 @@
 
 namespace AtcSimController.AIController
 {
+    /// <summary>
+    /// Routing target information
+    /// </summary>
     class RouteTarget
     {
         private Location _dest;

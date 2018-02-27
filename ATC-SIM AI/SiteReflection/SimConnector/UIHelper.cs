@@ -5,7 +5,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace AtcSimController.SiteReflection.SimConnector
 {
-    class UIHelper
+    sealed class UIHelper
     {
         /// <summary>
         /// Changes a DropDown selector by value

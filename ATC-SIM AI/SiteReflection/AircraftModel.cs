@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AtcSimController.SiteReflection
+﻿namespace AtcSimController.SiteReflection
 {
-    class AircraftModel
+    public class AircraftModel
     {
+        /// <summary>
+        /// Default cruising speed (kts)
+        /// </summary>
         private int _cruiseSpeed;
+        /// <summary>
+        /// Speed aircraft must reach for liftoff (kts)
+        /// </summary>
         private int _liftoffSpeed;
+        /// <summary>
+        /// Default speed for aircraft when on final (kts)
+        /// </summary>
         private int _approachSpeed;
         
         /// <summary>

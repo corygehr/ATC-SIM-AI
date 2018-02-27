@@ -1,6 +1,6 @@
 ﻿namespace AtcSimController.SiteReflection
 {
-    class Location
+    sealed class Location
     {
         private double _x;
         private double _y;

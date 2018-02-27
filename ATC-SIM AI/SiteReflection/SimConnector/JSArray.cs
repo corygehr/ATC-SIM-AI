@@ -6,7 +6,7 @@ namespace AtcSimController.SiteReflection.SimConnector
     /// <summary>
     /// Provides advanced parsing for raw arrays taken from Javascript
     /// </summary>
-    class JSArray
+    sealed class JSArray
     {
         private ReadOnlyCollection<object> _raw;
 

@@ -1,9 +1,8 @@
 ﻿using OpenQA.Selenium;
-using System.Collections.Generic;
 
 namespace AtcSimController.SiteReflection.SimConnector
 {
-    class BrowserCapture
+    sealed class BrowserCapture
     {
         private IWebDriver _driver;
         private IJavaScriptExecutor _js;
