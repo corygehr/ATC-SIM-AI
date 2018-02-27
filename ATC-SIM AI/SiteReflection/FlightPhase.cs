@@ -1,6 +1,9 @@
 ﻿namespace AtcSimController.SiteReflection
 {
-    public enum FlightPhase
+    /// <summary>
+    /// Simulator Flight Phase designators
+    /// </summary>
+    enum FlightPhase
     {
         ARRIVAL = 'A',
         DEPARTURE = 'D',

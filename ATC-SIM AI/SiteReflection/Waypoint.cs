@@ -1,6 +1,6 @@
 ﻿namespace AtcSimController.SiteReflection
 {
-    class Waypoint
+    sealed class Waypoint
     {
         private int _heading;
         private Location _location;

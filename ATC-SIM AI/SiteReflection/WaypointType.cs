@@ -1,5 +1,8 @@
 ﻿namespace AtcSimController.SiteReflection
 {
+    /// <summary>
+    /// Simulator Waypoint type indicators
+    /// </summary>
     enum WaypointType
     {
         RUNWAY = 0,
