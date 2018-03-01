@@ -50,40 +50,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AIController\Router.cs" />
-    <Compile Include="AIController\RouteTarget.cs" />
+    <Compile Include="Controller\TrafficController.cs" />
+    <Compile Include="Controller\Departures\Departures.cs" />
+    <Compile Include="Controller\Departures\Models\RouteTarget.cs" />
     <Compile Include="AIEntry.cs" />
     <Compile Include="Resources\Messages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
-    <Compile Include="SiteReflection\AircraftModel.cs" />
-    <Compile Include="AIController\Controller.cs" />
-    <Compile Include="AIController\ControllerCommand.cs" />
-    <Compile Include="SiteReflection\Flight.cs" />
-    <Compile Include="SiteReflection\FlightPhase.cs" />
-    <Compile Include="SiteReflection\SimConnector\JSArray.cs" />
-    <Compile Include="SiteReflection\Location.cs" />
-    <Compile Include="AIController\RoutePhase.cs" />
-    <Compile Include="SiteReflection\Environment.cs" />
-    <Compile Include="SiteReflection\SimConnector\Resources\FormElements.Designer.cs">
+    <Compile Include="SiteReflection\Models\Aircraft.cs" />
+    <Compile Include="Controller\Directive.cs" />
+    <Compile Include="Controller\Models\Flight.cs" />
+    <Compile Include="SiteReflection\Models\FlightPhase.cs" />
+    <Compile Include="SiteReflection\JSArray.cs" />
+    <Compile Include="SiteReflection\Models\Location.cs" />
+    <Compile Include="Controller\Departures\Models\RoutePhase.cs" />
+    <Compile Include="Controller\RadarScope.cs" />
+    <Compile Include="SiteReflection\Resources\FormElements.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FormElements.resx</DependentUpon>
     </Compile>
-    <Compile Include="SiteReflection\SimConnector\Resources\JSVariables.Designer.cs">
+    <Compile Include="SiteReflection\Resources\JSVariables.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>JSVariables.resx</DependentUpon>
     </Compile>
-    <Compile Include="SiteReflection\Statistics.cs" />
-    <Compile Include="SiteReflection\Waypoint.cs" />
+    <Compile Include="SiteReflection\Models\Statistics.cs" />
+    <Compile Include="SiteReflection\Models\Waypoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SiteReflection\SimConnector\BrowserCapture.cs" />
-    <Compile Include="SiteReflection\SimConnector\Instruction.cs" />
-    <Compile Include="SiteReflection\SimConnector\UIHelper.cs" />
-    <Compile Include="SiteReflection\WaypointType.cs" />
+    <Compile Include="SiteReflection\BrowserCapture.cs" />
+    <Compile Include="SiteReflection\Models\Instruction.cs" />
+    <Compile Include="SiteReflection\UIHelper.cs" />
+    <Compile Include="SiteReflection\Models\WaypointType.cs" />
+    <Compile Include="Supervisor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -108,15 +109,16 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SiteReflection\SimConnector\Resources\FormElements.resx">
+    <EmbeddedResource Include="SiteReflection\Resources\FormElements.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>FormElements.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SiteReflection\SimConnector\Resources\JSVariables.resx">
+    <EmbeddedResource Include="SiteReflection\Resources\JSVariables.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>JSVariables.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

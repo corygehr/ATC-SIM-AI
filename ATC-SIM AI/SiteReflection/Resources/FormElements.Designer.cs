@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AtcSimController.SiteReflection.SimConnector.Resources {
+namespace AtcSimController.SiteReflection.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace AtcSimController.SiteReflection.SimConnector.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AtcSimController.SiteReflection.SimConnector.Resources.FormElements", typeof(FormElements).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AtcSimController.SiteReflection.Resources.FormElements", typeof(FormElements).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

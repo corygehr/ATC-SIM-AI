@@ -121,6 +121,10 @@
     <value>Additional details: {0}</value>
     <comment>Additional event information.</comment>
   </data>
+  <data name="BROKER_CONNECTION_FAIL" xml:space="preserve">
+    <value>The simulation data broker object was not provided to the controller.</value>
+    <comment>Data broker object failed to be provided to the controller class.</comment>
+  </data>
   <data name="CONTROLLER_READY" xml:space="preserve">
     <value>Controller Active</value>
     <comment>Controller active message.</comment>

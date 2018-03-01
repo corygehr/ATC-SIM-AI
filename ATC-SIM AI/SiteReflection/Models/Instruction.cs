@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AtcSimController.SiteReflection.SimConnector
+namespace AtcSimController.SiteReflection.Models
 {
     /// <summary>
     /// Simulator instructions enum

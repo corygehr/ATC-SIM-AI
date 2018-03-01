@@ -70,6 +70,15 @@ namespace AtcSimController.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The simulation data broker object was not provided to the controller..
+        /// </summary>
+        internal static string BROKER_CONNECTION_FAIL {
+            get {
+                return ResourceManager.GetString("BROKER_CONNECTION_FAIL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Controller Active.
         /// </summary>
         internal static string CONTROLLER_READY {

@@ -1,6 +1,9 @@
-﻿namespace AtcSimController.SiteReflection
+﻿namespace AtcSimController.SiteReflection.Models
 {
-    sealed class Statistics
+    /// <summary>
+    /// User score object
+    /// </summary>
+    public sealed class Statistics
     {
         private int _landings;
         private int _handoffs;

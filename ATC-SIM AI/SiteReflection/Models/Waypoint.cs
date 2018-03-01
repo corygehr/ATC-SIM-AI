@@ -1,6 +1,9 @@
-﻿namespace AtcSimController.SiteReflection
+﻿namespace AtcSimController.SiteReflection.Models
 {
-    sealed class Waypoint
+    /// <summary>
+    /// Waypoint object on the Radar Screen
+    /// </summary>
+    public sealed class Waypoint
     {
         private int _heading;
         private Location _location;

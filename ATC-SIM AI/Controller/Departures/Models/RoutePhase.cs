@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AtcSimController.AIController
+namespace AtcSimController.Controller.Departures.Models
 {
     /// <summary>
-    /// Route Phase enum
+    /// Flight Phase enum
     /// </summary>
     public sealed class RoutePhase
     {
@@ -28,7 +28,7 @@ namespace AtcSimController.AIController
         /// <summary>
         /// Aircraft has been established on the radar scope for arrival
         /// </summary>
-        public static RoutePhase ESTABLISHED = new AIController.RoutePhase(2, "ESTABLISHED");
+        public static RoutePhase ESTABLISHED = new RoutePhase(2, "ESTABLISHED");
         /// <summary>
         /// Aircraft is executing their departure procedure as provided by the controller
         /// </summary>

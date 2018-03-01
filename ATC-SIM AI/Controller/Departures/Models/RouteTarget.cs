@@ -1,11 +1,11 @@
-﻿using AtcSimController.SiteReflection;
+﻿using AtcSimController.SiteReflection.Models;
 
-namespace AtcSimController.AIController
+namespace AtcSimController.Controller.Departures.Models
 {
     /// <summary>
     /// Routing target information
     /// </summary>
-    class RouteTarget
+    public class RouteTarget
     {
         private Location _dest;
         private int _heading;

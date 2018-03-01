@@ -1,10 +1,13 @@
 ﻿using System;
 
-namespace AtcSimController.SiteReflection
+namespace AtcSimController.SiteReflection.Models
 {
-    class Flight
+    /// <summary>
+    /// Flight object
+    /// </summary>
+    public sealed class Flight
     {
-        private AircraftModel _model;
+        private Aircraft _model;
         private int _altitude;
         private FlightPhase _type;
         private Waypoint _destination;
@@ -25,7 +28,7 @@ namespace AtcSimController.SiteReflection
         /// <param name="speed">Current speed</param>
         /// <param name="heading">Current heading</param>
         /// <param name="location">Current Location</param>
-        public Flight(string name, AircraftModel model, FlightPhase type, ref Waypoint dest, int altitude = 0, int speed = 0, int heading = 0, Location location = null)
+        public Flight(string name, Aircraft model, FlightPhase type, ref Waypoint dest, int altitude = 0, int speed = 0, int heading = 0, Location location = null)
         {
             this._name = name;
             this._model = model;
@@ -50,7 +53,7 @@ namespace AtcSimController.SiteReflection
         /// <param name="heading">Current heading</param>
         /// <param name="x">Current Location on the X-axis</param>
         /// <param name="y">Current Location on the Y-axis</param>
-        public Flight(string name, AircraftModel model, FlightPhase type, ref Waypoint dest, int altitude = 0, int speed = 0, int heading = 0, double x = 0, double y = 0)
+        public Flight(string name, Aircraft model, FlightPhase type, ref Waypoint dest, int altitude = 0, int speed = 0, int heading = 0, double x = 0, double y = 0)
         {
             this._name = name;
             this._model = model;
@@ -182,6 +185,11 @@ namespace AtcSimController.SiteReflection
             {
                 return this._targetAltitude;
             }
+        }
+
+        public override string ToString()
+        {
+            return this._name;
         }
     }
 }

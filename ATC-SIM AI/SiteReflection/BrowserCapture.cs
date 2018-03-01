@@ -1,7 +1,10 @@
 ﻿using OpenQA.Selenium;
 
-namespace AtcSimController.SiteReflection.SimConnector
+namespace AtcSimController.SiteReflection
 {
+    /// <summary>
+    /// Helper class to capture Browser objects
+    /// </summary>
     sealed class BrowserCapture
     {
         private IWebDriver _driver;
@@ -28,12 +31,14 @@ namespace AtcSimController.SiteReflection.SimConnector
         }
 
         /// <summary>
-        /// Tells if the simulator is still active
+        /// Tells if the simulation is still active
         /// </summary>
-        /// <returns>True if active, false if not</returns>
-        public bool SimActive()
+        public bool SimActive
         {
-            return true;
+            get
+            {
+                return true;
+            }
         }
     }
 }

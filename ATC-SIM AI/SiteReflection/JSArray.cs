@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace AtcSimController.SiteReflection.SimConnector
+namespace AtcSimController.SiteReflection
 {
     /// <summary>
-    /// Provides advanced parsing for raw arrays taken from Javascript
+    /// Advanced parsing for raw arrays taken from Javascript
     /// </summary>
     sealed class JSArray
     {

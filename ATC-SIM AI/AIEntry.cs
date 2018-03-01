@@ -1,13 +1,15 @@
-﻿using AtcSimController.AIController;
+﻿using AtcSimController.Controller;
+using AtcSimController.Controller.Departures;
 using AtcSimController.Resources;
+using AtcSimController.SiteReflection.Resources;
 using AtcSimController.SiteReflection.SimConnector;
-using AtcSimController.SiteReflection.SimConnector.Resources;
 
 using OpenQA.Selenium;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Chrome;
 using System;
+using System.Threading;
 
 namespace AtcSimController
 {
@@ -30,7 +32,7 @@ namespace AtcSimController
 
                 IWebDriver driver;
 
-                switch (args[0])
+                switch (args[0].ToLower())
                 {
                     case "chrome":
                         // Prepare Chrome settings
@@ -75,7 +77,7 @@ namespace AtcSimController
                 {
                     /// AIRPORT
                     // Change the value of the airport selector
-                    UIHelper.ChangeDropDownByValue(ref driver, FormElements.AIRPORT_SELECTION_ID, args[1]);
+                    UIHelper.ChangeDropDownByValue(ref driver, FormElements.AIRPORT_SELECTION_ID, args[1].ToUpper());
 
                     /// IATA Preference
                     if (Boolean.Parse(args[2]))
@@ -89,7 +91,7 @@ namespace AtcSimController
 
                     // REALISM
                     string playMoveValue;
-                    switch (args[4])
+                    switch (args[4].ToLower())
                     {
                         case "easy":
                             playMoveValue = "1";
@@ -150,15 +152,22 @@ namespace AtcSimController
 
                 #region Traffic Controller Active
 
-                // Start controller
-                Controller controller = new Controller(driver);
-                controller.Run();
+                // Create cancellation token to stop the process if necessary
+                CancellationToken cancellationToken = new CancellationToken();
 
-                // One Run() has finished, exit
-                driver.Quit();
+                // Create Supervisor to run simulation
+                Supervisor simulation = new Supervisor(driver, cancellationToken);
 
-                Console.WriteLine(String.Format("\n--{0}--", Messages.SELENIUM_DISCONNECTED));
+                // Start simulation
+                simulation.Run().ContinueWith((t) =>
+                {
+                    // Terminate web driver connection
+                    driver.Quit();
+                    Console.WriteLine(String.Format("\n--{0}--", Messages.SELENIUM_DISCONNECTED));
 
+                    // Output final scores
+                    Console.WriteLine(simulation.Scope.Score);
+                });
                 #endregion
             }
             else

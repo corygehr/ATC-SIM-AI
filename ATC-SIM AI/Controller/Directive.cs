@@ -1,13 +1,14 @@
-﻿using AtcSimController.SiteReflection;
+﻿using AtcSimController.Resources;
+using AtcSimController.SiteReflection.Models;
+using AtcSimController.SiteReflection.Resources;
 using AtcSimController.SiteReflection.SimConnector;
-using System;
-using OpenQA.Selenium;
-using AtcSimController.SiteReflection.SimConnector.Resources;
-using AtcSimController.Resources;
 
-namespace AtcSimController.AIController
+using OpenQA.Selenium;
+using System;
+
+namespace AtcSimController.Controller
 {
-    class ControllerCommand
+    public class Directive
     {
         private Instruction _action;
         private string _command;
@@ -18,9 +19,9 @@ namespace AtcSimController.AIController
         private string _value;
 
         /// <summary>
-        /// Constructor for the <see cref="ControllerCommand"/> class
+        /// Constructor for the <see cref="Directive"/> class
         /// </summary>
-        public ControllerCommand()
+        public Directive()
         {
         }
 
@@ -28,7 +29,7 @@ namespace AtcSimController.AIController
         /// Constructor that allows explicit command specification
         /// </summary>
         /// <param name="command">Full Command Text</param>
-        public ControllerCommand(string command)
+        public Directive(string command)
         {
             this._explicitCommand = command;
         }
