@@ -4,8 +4,6 @@ using AtcSimController.SiteReflection.Resources;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace AtcSimController.Controller
 {
@@ -14,10 +12,11 @@ namespace AtcSimController.Controller
     /// </summary>
     public sealed class RadarScope
     {
-        #region Internal Variable References
+        #region Internal accessors
         private int[] _activeRunwayIndices = new int[0];
         private List<Waypoint> _activeRunways = new List<Waypoint>();
-        private List<Aircraft> _aircraft = new List<Aircraft>();
+        private List<AircraftSpecification> _aircraft = new List<AircraftSpecification>();
+        private Airport _airport;
         private BrowserCapture _dataBroker;
         private Statistics _stats = new Statistics();
         private List<Waypoint> _waypoints = new List<Waypoint>();
@@ -26,7 +25,7 @@ namespace AtcSimController.Controller
         private int _windHdg = 0;
         #endregion
 
-        #region Public Variable Accessors
+        #region Public accessors
         /// <summary>
         /// Currently active runways
         /// </summary>
@@ -35,6 +34,16 @@ namespace AtcSimController.Controller
             get
             {
                 return this._activeRunways;
+            }
+        }
+        /// <summary>
+        /// Airport data
+        /// </summary>
+        public Airport Airport
+        {
+            get
+            {
+                return this._airport;
             }
         }
         /// <summary>
@@ -97,8 +106,9 @@ namespace AtcSimController.Controller
             // Open data broker connection
             this._dataBroker = new BrowserCapture(driver);
             // Get initial data sources
-            this._fetchAircraftModels();
             this._fetchWaypoints();
+            this._fetchAircraftModels();
+            this._fetchAirportData();
         }
 
         /// <summary>
@@ -112,6 +122,21 @@ namespace AtcSimController.Controller
             this._refreshFlights();
             // Refresh controller statistics
             this._refreshStats();
+        }
+
+        /// <summary>
+        /// Fetches data about the airfield used for this simulation
+        /// </summary>
+        private void _fetchAirportData()
+        {
+            // Get airfield data
+            int elevation = Convert.ToInt32(this._dataBroker.FetchRawJSVariable(JSVariables.AIRFIELD_ALTITUDE));
+            // Get runways
+            List<Waypoint> runways = new List<Waypoint>();
+            runways = this._waypoints.FindAll(r => r.Type == WaypointType.RUNWAY);
+
+            // Create Airport object
+            this._airport = new Airport(elevation, runways);
         }
 
         /// <summary>
@@ -129,7 +154,7 @@ namespace AtcSimController.Controller
                 JSArray model = new JSArray(rawModels.RawData[i]);
 
                 // Add to models array
-                this._aircraft.Add(new Aircraft(
+                this._aircraft.Add(new AircraftSpecification(
                     Convert.ToInt32(model.RawData[0]),
                     Convert.ToInt32(model.RawData[1]),
                     Convert.ToInt32(model.RawData[2])
@@ -162,7 +187,7 @@ namespace AtcSimController.Controller
                 int z = Convert.ToInt32(data["4"]);
                 int hdg = Convert.ToInt32(data["5"]);
                 int spd = Convert.ToInt32(data["6"]);
-                int fltMode = Convert.ToInt32(data["7"]);
+                int fltMode = Convert.ToInt32(data["7"]); // 1 when heading, 2 when nav
                 int hdgClr = Convert.ToInt32(data["8"]);
                 int altClr = Convert.ToInt32(data["9"]);
                 int spdClr = Convert.ToInt32(data["10"]);
@@ -172,19 +197,31 @@ namespace AtcSimController.Controller
                 int lr = Convert.ToInt32(data["14"]);
                 int timerSec = Convert.ToInt32(data["15"]);
                 char timerMode = Convert.ToChar(data["16"]);
-                int expedite = Convert.ToInt32(data["17"]);
+                bool expedite = Convert.ToBoolean(data["17"]);
                 bool conflict = Convert.ToBoolean(data["18"]);
+                string airline = Convert.ToString(data["19"]);
 
-                Waypoint destination = this._waypoints[dest];
+                Waypoint clearedDest = null;
+
+                if(navClrId >= 0)
+                {
+                    clearedDest = this._waypoints[navClrId];
+                }
 
                 Flight newFlt = new Flight(
                     flightNum,
+                    airline,
+                    aircraft,
                     this._aircraft[modelInd],
-                    (FlightPhase)timerMode,
-                    ref destination,
+                    (Status)timerMode,
+                    this._waypoints[dest],
+                    clearedDest,
                     z,
+                    altClr,
                     spd,
+                    spdClr,
                     hdg,
+                    hdgClr,
                     x,
                     y
                 );
@@ -219,7 +256,7 @@ namespace AtcSimController.Controller
                 // Create Waypoint object
                 Waypoint result = new Waypoint(
                     Convert.ToString(wpt.RawData[0]),
-                    Convert.ToInt32(wpt.RawData[1]),
+                    (WaypointType) Convert.ToInt32(wpt.RawData[1]),
                     Convert.ToInt32(wpt.RawData[2]),
                     Convert.ToInt32(wpt.RawData[3]),
                     heading

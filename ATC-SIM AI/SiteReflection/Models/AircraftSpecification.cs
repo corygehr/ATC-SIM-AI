@@ -3,9 +3,9 @@
 namespace AtcSimController.SiteReflection.Models
 {
     /// <summary>
-    /// Aircraft Model
+    /// Aircraft Model Specifications
     /// </summary>
-    public sealed class Aircraft
+    public sealed class AircraftSpecification
     {
         /// <summary>
         /// Default speed for aircraft when on final (kts)
@@ -21,12 +21,12 @@ namespace AtcSimController.SiteReflection.Models
         private int _liftoffSpeed;
         
         /// <summary>
-        /// Constructor for the AircraftModel class, which defines speeds for different aircraft types
+        /// Constructor for the <see cref="AircraftSpecification"/> class, which defines speeds for different aircraft types
         /// </summary>
         /// <param name="cruise">Cruise speed</param>
         /// <param name="liftoff">Liftoff speed</param>
         /// <param name="approach">Approach speed</param>
-        public Aircraft(int cruise, int liftoff, int approach)
+        public AircraftSpecification(int cruise, int liftoff, int approach)
         {
             this._cruiseSpeed = cruise;
             this._liftoffSpeed = liftoff;

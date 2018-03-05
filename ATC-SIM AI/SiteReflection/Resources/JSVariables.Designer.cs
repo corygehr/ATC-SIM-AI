@@ -79,6 +79,15 @@ namespace AtcSimController.SiteReflection.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to intFieldElev.
+        /// </summary>
+        internal static string AIRFIELD_ALTITUDE {
+            get {
+                return ResourceManager.GetString("AIRFIELD_ALTITUDE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to G_objPlanes.
         /// </summary>
         internal static string FLIGHTS {

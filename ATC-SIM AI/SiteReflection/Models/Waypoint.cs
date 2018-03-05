@@ -8,7 +8,7 @@
         private int _heading;
         private Location _location;
         private string _name;
-        private int _type;
+        private WaypointType _type;
 
         /// <summary>
         /// Default constructor for a Waypoint object
@@ -18,7 +18,7 @@
         /// <param name="x">Waypoint x location</param>
         /// <param name="y">Waypoint y location</param>
         /// <param name="heading">Heading (runway)</param>
-        public Waypoint(string name, int type, double x, double y, int heading = -1)
+        public Waypoint(string name, WaypointType type, double x, double y, int heading = -1)
         {
             this._heading = heading;
             this._name = name;
@@ -33,7 +33,7 @@
         /// <param name="type">Waypoint type</param>
         /// <param name="location">Waypoint Location object</param>
         /// <param name="heading">Heading (runway)</param>
-        public Waypoint(string name, int type, Location location, int heading = -1)
+        public Waypoint(string name, WaypointType type, Location location, int heading = -1)
         {
             this._heading = heading;
             this._name = name;
@@ -77,7 +77,7 @@
         /// <summary>
         /// Returns the numeric type identifier of this waypoint (see WaypointType)
         /// </summary>
-        public int Type
+        public WaypointType Type
         {
             get
             {

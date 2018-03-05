@@ -1,6 +1,5 @@
 ﻿using AtcSimController.Resources;
 using System;
-using System.Threading.Tasks;
 
 namespace AtcSimController.Controller
 {

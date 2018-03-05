@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AtcSimController.SiteReflection.Models;
+using System;
 using System.Collections.Generic;
 
 namespace AtcSimController.Controller.Departures.Models
@@ -38,37 +39,37 @@ namespace AtcSimController.Controller.Departures.Models
         /// </summary>
         public static RoutePhase GO_AROUND = new RoutePhase(4, "GO_AROUND");
         /// <summary>
-        /// Aircraft is on the ground after landing
-        /// </summary>
-        public static RoutePhase GROUND = new RoutePhase(5, "GROUND");
-        /// <summary>
         /// Aircraft is landing on the runway
         /// </summary>
-        public static RoutePhase LANDING = new RoutePhase(6, "LANDING");
+        public static RoutePhase LANDING = new RoutePhase(5, "LANDING");
         /// <summary>
         /// Aircraft has left the ground as part of their takeoff procedure
         /// </summary>
-        public static RoutePhase LIFTOFF = new RoutePhase(7, "LIFTOFF");
+        public static RoutePhase LIFTOFF = new RoutePhase(6, "LIFTOFF");
         /// <summary>
         /// Aircraft is holding on the runway for takeoff clearance
         /// </summary>
-        public static RoutePhase LINEUP_WAIT = new RoutePhase(8, "LINEUP_WAIT");
+        public static RoutePhase LINEUP_WAIT = new RoutePhase(7, "LINEUP_WAIT");
         /// <summary>
         /// Aircraft is on approach to the airport (with instructions from the controller)
         /// </summary>
-        public static RoutePhase ON_APPROACH = new RoutePhase(9, "ON_APPROACH");
+        public static RoutePhase ON_APPROACH = new RoutePhase(8, "ON_APPROACH");
         /// <summary>
         /// Aircraft is on final to the runway
         /// </summary>
-        public static RoutePhase ON_FINAL = new RoutePhase(10, "ON_FINAL");
+        public static RoutePhase ON_FINAL = new RoutePhase(9, "ON_FINAL");
         /// <summary>
         /// Aircraft is ready for takeoff but not on the scope
         /// </summary>
-        public static RoutePhase READY_TAKEOFF = new RoutePhase(11, "READY_TAKEOFF");
+        public static RoutePhase READY_TAKEOFF = new RoutePhase(10, "READY_TAKEOFF");
         /// <summary>
         /// Aircraft is taking off, rolling down the runway
         /// </summary>
-        public static RoutePhase ROLLING = new RoutePhase(12, "ROLLING");
+        public static RoutePhase ROLLING = new RoutePhase(11, "ROLLING");
+        /// <summary>
+        /// Aircraft is coming to a stop on the runway
+        /// </summary>
+        public static RoutePhase STOPPING = new RoutePhase(12, "STOPPING");
 
         /// <summary>
         /// Creates a new <see cref="RoutePhase"/> enum object
@@ -106,6 +107,64 @@ namespace AtcSimController.Controller.Departures.Models
             else
             {
                 throw new InvalidCastException();
+            }
+        }
+
+        /// <summary>
+        /// Determines the flight phase
+        /// </summary>
+        /// <param name="target">Flight to be analyzed</param>
+        /// <param name="airport">Airport object</param>
+        /// <returns>Current flight phase</returns>
+        public static RoutePhase DeterminePhase(Flight target, Airport airport)
+        {
+            switch(target.Status)
+            {
+                case Status.DEPARTURE:
+                    return READY_TAKEOFF;
+
+                case Status.HOLD:
+                    return LINEUP_WAIT;
+
+                case Status.TAKEOFF:
+                    if(target.Altitude == airport.Altitude && target.ClearedDestination.Type == WaypointType.RUNWAY)
+                    {
+                        // Takeoff status with airport altitude is still rolling
+                        return ROLLING;
+                    }
+                    else if(target.Altitude > airport.Altitude && target.Altitude < (airport.Altitude + 1000))
+                    {
+                        // Aircraft must be over 1000ft above field to begin executing turns
+                        return LIFTOFF;
+                    }
+                    else
+                    {
+                        return DEPARTURE;
+                    }
+
+                case Status.ARRIVAL:
+                    if(target.ClearedDestination.Type != WaypointType.RUNWAY)
+                    {
+                        // Aircraft is being routed to the airport
+                        return ON_APPROACH;
+                    }
+                    else if(target.ClearedDestination.Type == WaypointType.RUNWAY && target.Altitude != airport.Altitude && target.ClearedAltitude == airport.Altitude)
+                    {
+                        // Runway as target indicates aircraft is on final
+                        return LANDING;
+                    }
+                    else if(target.ClearedDestination.Type == WaypointType.RUNWAY && target.Altitude == airport.Altitude && target.ClearedAltitude == airport.Altitude)
+                    {
+                        // Aircraft is coming to a stop
+                        return STOPPING;
+                    }
+                    else
+                    {
+                        return ESTABLISHED;
+                    }
+
+                default:
+                    throw new ArgumentException(String.Format("Unknown Status '{0}' provided. Flight Detail: {1}", target.Status, target.ToString()));
             }
         }
     }

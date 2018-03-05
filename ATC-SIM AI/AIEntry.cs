@@ -1,6 +1,4 @@
-﻿using AtcSimController.Controller;
-using AtcSimController.Controller.Departures;
-using AtcSimController.Resources;
+﻿using AtcSimController.Resources;
 using AtcSimController.SiteReflection.Resources;
 using AtcSimController.SiteReflection.SimConnector;
 
@@ -134,6 +132,12 @@ namespace AtcSimController
                             return false;
                         }
                     });
+
+                    // If there's a "Guest User" message, suppress it
+                    if(driver.FindElement(By.Id("infoboxcontent")) != null)
+                    {
+                        ((IJavaScriptExecutor) driver).ExecuteScript("fnCloseModal();");
+                    }
                 }
                 catch (NoSuchElementException ex)
                 {
@@ -153,21 +157,35 @@ namespace AtcSimController
                 #region Traffic Controller Active
 
                 // Create cancellation token to stop the process if necessary
-                CancellationToken cancellationToken = new CancellationToken();
+                CancellationTokenSource cTokenSource = new CancellationTokenSource();
 
                 // Create Supervisor to run simulation
-                Supervisor simulation = new Supervisor(driver, cancellationToken);
-
+                Supervisor simulation = new Supervisor(driver, cTokenSource.Token);
+                
                 // Start simulation
-                simulation.Run().ContinueWith((t) =>
+                try
                 {
-                    // Terminate web driver connection
-                    driver.Quit();
-                    Console.WriteLine(String.Format("\n--{0}--", Messages.SELENIUM_DISCONNECTED));
+                    simulation.Run().ContinueWith((t) =>
+                    {
+                        // Terminate web driver connection
 
-                    // Output final scores
-                    Console.WriteLine(simulation.Scope.Score);
-                });
+                        Console.WriteLine(String.Format("\n--{0}--", Messages.SELENIUM_DISCONNECTED));
+
+                        // Output final scores
+                        Console.WriteLine(simulation.Scope.Score);
+                    });
+                }
+                catch(Exception ex)
+                {
+                    Console.Error.WriteLine(String.Format(Messages.ERROR_BASE, Messages.ERROR_GENERIC));
+                    Console.Error.WriteLine(String.Format(Messages.ADDITIONAL_INFO, ex.Message));
+                }
+                finally
+                {
+                    driver.Quit();
+                    cTokenSource.Dispose();
+                }
+
                 #endregion
             }
             else

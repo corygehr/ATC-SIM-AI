@@ -1,6 +1,5 @@
 ﻿using AtcSimController.Controller;
 using AtcSimController.Controller.Departures;
-using AtcSimController.SiteReflection.Models;
 using OpenQA.Selenium;
 using System.Threading;
 using System.Threading.Tasks;
@@ -62,17 +61,8 @@ namespace AtcSimController
                 while (!this._cancellationToken.IsCancellationRequested)
                 {
                     this._scope.Refresh();
-                    // Pause 1sec before doing next refresh
-                    Thread.Sleep(1000);
-                }
-            });
-
-            // Loop scope actions
-            await Task.Run(() =>
-            {
-                while (!this._cancellationToken.IsCancellationRequested)
-                {
                     this._controller.DoRouting();
+                    // Pause 1sec before doing next automatic refresh
                     Thread.Sleep(1000);
                 }
             });

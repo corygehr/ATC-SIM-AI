@@ -59,10 +59,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
-    <Compile Include="SiteReflection\Models\Aircraft.cs" />
+    <Compile Include="SiteReflection\Models\AircraftSpecification.cs" />
     <Compile Include="Controller\Directive.cs" />
     <Compile Include="Controller\Models\Flight.cs" />
-    <Compile Include="SiteReflection\Models\FlightPhase.cs" />
+    <Compile Include="SiteReflection\Models\Airport.cs" />
+    <Compile Include="SiteReflection\Models\Status.cs" />
     <Compile Include="SiteReflection\JSArray.cs" />
     <Compile Include="SiteReflection\Models\Location.cs" />
     <Compile Include="Controller\Departures\Models\RoutePhase.cs" />

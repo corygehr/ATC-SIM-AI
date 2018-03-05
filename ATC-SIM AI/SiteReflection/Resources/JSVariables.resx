@@ -125,6 +125,10 @@
     <value>G_arrModelSpeeds</value>
     <comment>Aircraft data array name.</comment>
   </data>
+  <data name="AIRFIELD_ALTITUDE" xml:space="preserve">
+    <value>intFieldElev</value>
+    <comment>Airfield base altitude.</comment>
+  </data>
   <data name="FLIGHTS" xml:space="preserve">
     <value>G_objPlanes</value>
     <comment>Flight data array name.</comment>

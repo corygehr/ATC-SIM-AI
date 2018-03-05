@@ -85,7 +85,7 @@ namespace AtcSimController.Controller
             else
             {
                 // Create the command using the values provided
-                this._command = String.Join(" ", _flight.Name, _action, _value);
+                this._command = String.Join(" ", _flight.Callsign, _action, _value);
                 
                 // Expedite command (if requested)
                 if (this._expedite && _action != Instruction.ABORT)
