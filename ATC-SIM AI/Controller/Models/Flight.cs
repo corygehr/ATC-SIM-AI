@@ -5,7 +5,7 @@ namespace AtcSimController.SiteReflection.Models
     /// <summary>
     /// Flight object
     /// </summary>
-    public sealed class Flight
+    public class Flight
     {
         private string _airline;
         private int _altitude;
@@ -22,48 +22,7 @@ namespace AtcSimController.SiteReflection.Models
         private AircraftSpecification _specs;
         private int _speed;
         private int _speedTarget;
-        private int _targetAltitude;
         private Status _type;
-
-        /// <summary>
-        /// Constructor for the Flight class
-        /// </summary>
-        /// <param name="callsign">Flight callsign</param>
-        /// <param name="airline">Airline identifier</param>
-        /// <param name="model">Aircraft Model Name</param>
-        /// <param name="specs">Aircraft Operating Specifications</param>
-        /// <param name="type">Flight Type</param>
-        /// <param name="dest">Destination Navpoint</param>
-        /// <param name="clearedDest">Current destination navpoint</param>
-        /// <param name="altitude">Current altitude</param>
-        /// <param name="clearedAltitude">Altitude target</param>
-        /// <param name="speed">Current speed</param>
-        /// <param name="clearedSpeed">Speed target</param>
-        /// <param name="heading">Current heading</param>
-        /// <param name="clearedHeading">Heading target</param>
-        /// <param name="location">Current Location</param>
-        /// <param name="conflict">Conflict warning</param>
-        /// <param name="expedited">Current instructions are expedited</param>
-        public Flight(string callsign, string airline, string model, AircraftSpecification specs, Status type, Waypoint dest, Waypoint clearedDest = null, int altitude = 0, int clearedAltitude = 0, int speed = 0, int clearedSpeed = 0, int heading = 0, int clearedHeading = 0, Location location = null, bool conflict = false, bool expedited = false)
-        {
-            this._callsign = callsign;
-            this._airline = airline;
-            this._model = model;
-            this._specs = specs;
-            this._expedited = expedited;
-            this._type = type;
-            this._destination = dest;
-            this._destinationTarget = clearedDest;
-            this._altitude = altitude;
-            this._altitudeTarget = clearedAltitude;
-            this._speed = speed;
-            this._speedTarget = clearedSpeed;
-            this._heading = heading;
-            this._headingTarget = clearedHeading;
-            this._location = location;
-            this._conflict = conflict;
-            this._targetAltitude = 0;
-        }
 
         /// <summary>
         /// Constructor for the Flight class that allows creation with explicit X and Y values
@@ -103,7 +62,6 @@ namespace AtcSimController.SiteReflection.Models
             this._headingTarget = clearedHeading;
             this._location = new Location(x, y);
             this._conflict = conflict;
-            this._targetAltitude = 0;
         }
 
         /// <summary>
@@ -117,38 +75,29 @@ namespace AtcSimController.SiteReflection.Models
         }
 
         /// <summary>
-        /// Updates the information about this flight
+        /// Updates flight data
         /// </summary>
         /// <param name="data">Flight object to update from</param>
         public void Update(Flight data)
         {
             if(data.Callsign == this._callsign)
             {
-                this._destination = data._destination;
                 this._altitude = data._altitude;
+                this._altitudeTarget = data._altitudeTarget;
+                this._conflict = data._conflict;
+                this._destination = data._destination;
+                this._destinationTarget = data._destinationTarget;
+                this._expedited = data._expedited;
+                this._heading = data._heading;
+                this._headingTarget = data._headingTarget;
                 this._location = data._location;
                 this._speed = data._speed;
-                this._expedited = data._expedited;
+                this._speedTarget = data._speedTarget;
             }
             else
             {
-                throw new Exception("FATAL: Flight objects do not match.");
+                throw new Exception("Flight objects do not match.");
             }
-        }
-
-        /// <summary>
-        /// Updates the information about this flight
-        /// </summary>
-        /// <param name="dest">Destination Navpoint</param>
-        /// <param name="altitude">Current altitude</param>
-        /// <param name="speed">Current speed</param>
-        /// <param name="location">Current location</param>
-        public void Update(ref Waypoint dest, int altitude, int speed, Location location)
-        {
-            this._destination = dest;
-            this._altitude = altitude;
-            this._location = location;
-            this._speed = speed;
         }
 
         /// <summary>
@@ -326,7 +275,7 @@ namespace AtcSimController.SiteReflection.Models
         {
             get
             {
-                return this._targetAltitude;
+                return this._altitudeTarget;
             }
         }
 

@@ -165,15 +165,12 @@ namespace AtcSimController
                 // Start simulation
                 try
                 {
-                    simulation.Run().ContinueWith((t) =>
-                    {
-                        // Terminate web driver connection
+                    // Simulation runs on the main thread, creates others within
+                    simulation.Run().Wait();
+                    Console.WriteLine(String.Format("\n--{0}--", Messages.SELENIUM_DISCONNECTED));
 
-                        Console.WriteLine(String.Format("\n--{0}--", Messages.SELENIUM_DISCONNECTED));
-
-                        // Output final scores
-                        Console.WriteLine(simulation.Scope.Score);
-                    });
+                    // Output final scores
+                    Console.WriteLine(simulation.Scope.Score);
                 }
                 catch(Exception ex)
                 {
