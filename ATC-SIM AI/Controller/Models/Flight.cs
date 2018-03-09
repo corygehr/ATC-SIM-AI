@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AtcSimController.SiteReflection.Models
 {
     /// <summary>
     /// Flight object
     /// </summary>
-    public class Flight
+    public class Flight : IEqualityComparer<Flight>, IEquatable<Flight>
     {
         private string _airline;
         private int _altitude;
@@ -72,32 +73,6 @@ namespace AtcSimController.SiteReflection.Models
         {
             return String.Join(" ", this._callsign, "-", this._altitude, 
                 this._location.ToString(), this._destination.Name, this._speed);
-        }
-
-        /// <summary>
-        /// Updates flight data
-        /// </summary>
-        /// <param name="data">Flight object to update from</param>
-        public void Update(Flight data)
-        {
-            if(data.Callsign == this._callsign)
-            {
-                this._altitude = data._altitude;
-                this._altitudeTarget = data._altitudeTarget;
-                this._conflict = data._conflict;
-                this._destination = data._destination;
-                this._destinationTarget = data._destinationTarget;
-                this._expedited = data._expedited;
-                this._heading = data._heading;
-                this._headingTarget = data._headingTarget;
-                this._location = data._location;
-                this._speed = data._speed;
-                this._speedTarget = data._speedTarget;
-            }
-            else
-            {
-                throw new Exception("Flight objects do not match.");
-            }
         }
 
         /// <summary>
@@ -293,6 +268,22 @@ namespace AtcSimController.SiteReflection.Models
         public override string ToString()
         {
             return this._callsign;
+        }
+
+        public bool Equals(Flight other)
+        {
+            return this.Equals(this, other);
+        }
+
+        public bool Equals(Flight x, Flight y)
+        {
+            return x._callsign == y._callsign;
+        }
+
+        public int GetHashCode(Flight obj)
+        {
+            // In this application, flights are equivalent if they have the same callsign - period.
+            return obj.Callsign.GetHashCode();
         }
     }
 }

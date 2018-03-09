@@ -4,6 +4,7 @@ using AtcSimController.SiteReflection.Resources;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace AtcSimController.Controller
 {
@@ -18,6 +19,7 @@ namespace AtcSimController.Controller
         private List<AircraftSpecification> _aircraft = new List<AircraftSpecification>();
         private Airport _airport;
         private BrowserCapture _dataBroker;
+        private IWebDriver _driver;
         private Statistics _stats = new Statistics();
         private List<Waypoint> _waypoints = new List<Waypoint>();
         private Dictionary<string, Flight> _flightDict = new Dictionary<string, Flight>();
@@ -67,6 +69,10 @@ namespace AtcSimController.Controller
             }
         }
         /// <summary>
+        /// Directives pending execution
+        /// </summary>
+        public Queue<Directive> PendingDirectives = new Queue<Directive>();
+        /// <summary>
         /// Current score
         /// </summary>
         public Statistics Score
@@ -104,11 +110,33 @@ namespace AtcSimController.Controller
         public RadarScope(IWebDriver driver)
         {
             // Open data broker connection
+            this._driver = driver;
             this._dataBroker = new BrowserCapture(driver);
             // Get initial data sources
             this._fetchWaypoints();
             this._fetchAircraftModels();
             this._fetchAirportData();
+        }
+
+        /// <summary>
+        /// Enqueues a <see cref="Directive"/> order
+        /// </summary>
+        /// <param name="directive">Directive to enqueue</param>
+        public void AddDirective(Directive directive)
+        {
+            this.PendingDirectives.Enqueue(directive);
+        }
+
+        /// <summary>
+        /// Executes all pending directives
+        /// </summary>
+        public void ExecuteDirectives()
+        {
+            while(this.PendingDirectives.Count > 0)
+            {
+                Directive next = this.PendingDirectives.Dequeue();
+                next.Execute(this._driver);
+            }
         }
 
         /// <summary>
@@ -286,6 +314,13 @@ namespace AtcSimController.Controller
             // Provide wind and active runways
             this._windHdg = Convert.ToInt32(this._dataBroker.FetchRawJSVariable(JSVariables.WIND_HEADING));
             this._activeRunwayIndices = new JSArray(this._dataBroker.FetchRawJSVariable(JSVariables.ACTIVE_RUNWAYS)).ParseToInt();
+
+            // Get new active runways
+            this._activeRunways = new List<Waypoint>();
+            foreach(int i in this._activeRunwayIndices)
+            {
+                this._activeRunways.Add(this._waypoints[i]);
+            }
         }
 
         public override string ToString()

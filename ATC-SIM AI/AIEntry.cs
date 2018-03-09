@@ -138,6 +138,9 @@ namespace AtcSimController
                     {
                         ((IJavaScriptExecutor) driver).ExecuteScript("fnCloseModal();");
                     }
+
+                    // Wait for simulation to finish loading
+                    Thread.Sleep(3000);
                 }
                 catch (NoSuchElementException ex)
                 {
@@ -161,7 +164,7 @@ namespace AtcSimController
 
                 // Create Supervisor to run simulation
                 Supervisor simulation = new Supervisor(driver, cTokenSource.Token);
-                
+
                 // Start simulation
                 try
                 {

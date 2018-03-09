@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
@@ -47,19 +48,31 @@ namespace AtcSimController.SiteReflection.SimConnector
         }
 
         /// <summary>
-        /// Enters text and submits the form
+        /// Enters text into a textbox and submits its parent form
         /// </summary>
         /// <param name="driver">Current Web Driver</param>
         /// <param name="element">Name of TextBox element</param>
         /// <param name="text">Text to Enter</param>
-        public static void EnterTextSubmitForm(IWebDriver driver, String element, String text)
+        public static void EnterText(IWebDriver driver, String element, String text)
         {
             // Get the textbox element
             IWebElement textBox = driver.FindElement(By.Name(element));
-            // To speed up input times, use JS as a workaround
+            // To decrease input time, use JS as a workaround
             (driver as IJavaScriptExecutor).ExecuteScript(
-                "document.getElementsByName('txtClearance')[0].setAttribute('value', '" + text + "')");
+                "document.getElementsByName('" + element + "')[0].setAttribute('value', '" + text + "')");
             textBox.Submit();
+        }
+
+        /// <summary>
+        /// Submits a command to the simulator
+        /// </summary>
+        /// <param name="driver">Current web driver</param>
+        /// <param name="command"></param>
+        public static void SubmitCommand(IWebDriver driver, String command)
+        {
+            // To decrease input time, use JS as a workaround
+            (driver as IJavaScriptExecutor).ExecuteScript(
+                String.Format("document.frmClearance.txtClearance.value = '{0}'; return fnParseInput();", command));
         }
 
         /// <summary>

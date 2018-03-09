@@ -62,7 +62,7 @@ namespace AtcSimController
                 {
                     this._scope.Refresh();
                     this._controller.DoRouting();
-                    // Pause 1sec before doing next automatic refresh
+                    // Pause before doing next refresh
                     Thread.Sleep(1000);
                 }
             });
