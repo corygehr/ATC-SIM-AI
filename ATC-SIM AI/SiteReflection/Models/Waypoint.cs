@@ -5,7 +5,7 @@ namespace AtcSimController.SiteReflection.Models
     /// <summary>
     /// Waypoint object on the Radar Screen
     /// </summary>
-    public sealed class Waypoint
+    public sealed class Waypoint : IEquatable<Waypoint>
     {
         private int _heading;
         private Location _location;
@@ -90,6 +90,11 @@ namespace AtcSimController.SiteReflection.Models
         public override string ToString()
         {
             return String.Format("{0} {1}", this.Name, this._location);
+        }
+
+        public bool Equals(Waypoint other)
+        {
+            return other.Name == this.Name && other.Type == this.Type;
         }
     }
 }

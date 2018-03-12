@@ -149,9 +149,9 @@ namespace AtcSimController.Controller.Departures
                 RoutePhase phase = RoutePhase.DeterminePhase(flight);
                 if (RoutePhase.IsEnroutePhase(phase))
                 {
-                    if(flight.Altitude >= Constants.HANDOFF_MIN_ALTITUDE_FT)
+                    if(flight.Altitude >= Constants.HANDOFF_MIN_ALTITUDE_FT && (flight.Status == Status.HOLD || (flight.ClearedDestination != null && flight.Destination.Name != flight.ClearedDestination.Name)))
                     {
-                        // Aircraft meets handoff criteria - clear to destination
+                        // Aircraft meets handoff criteria and is holding - clear to destination
                         Scope.AddDirective(Directive.ChangeDestination(flight, flight.Destination));
                         Scope.ExecuteDirectives();
                         Console.WriteLine(String.Format("[DEPARTURE] {0} cleared to {1}.", flight.Callsign, flight.Destination.Name));
