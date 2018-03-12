@@ -25,15 +25,11 @@
         
         public override string ToString()
         {
-            // Compile into string
-            string statString =
-                "Landings: " + this.Landings
-                + "; Handoffs: " + this.Handoffs
-                + "; Improper Exits: " + this.ImproperExits
-                + "; Missed Approaches: " + this.MissedApproaches
-                + "; Violation (secs): " + this.ViolationSeconds;
-
-            return statString;
+            return "Landings:" + this.Landings
+                + ";Handoffs:" + this.Handoffs
+                + ";ImproperExits:" + this.ImproperExits
+                + ";MissedApproaches:" + this.MissedApproaches
+                + ";ViolationSeconds:" + this.ViolationSeconds;
         }
 
         /// <summary>

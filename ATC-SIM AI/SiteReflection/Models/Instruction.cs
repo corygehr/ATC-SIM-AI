@@ -42,21 +42,37 @@ namespace AtcSimController.SiteReflection.Models
         /// </summary>
         public static readonly Instruction HEADING = new Instruction(4, "c");
         /// <summary>
+        /// Command designator for holding at a navpoint
+        /// </summary>
+        public static readonly Instruction HOLD = new Instruction(5, "h");
+        /// <summary>
         /// Command designator for aircraft landing clearance
         /// </summary>
-        public static readonly Instruction LAND = new Instruction(5, "l");
+        public static readonly Instruction LAND = new Instruction(6, "l");
+        /// <summary>
+        /// Command designator for lineup and wait on runway clearance
+        /// </summary>
+        public static readonly Instruction LINEUP_WAIT = new Instruction(7, "w");
+        /// <summary>
+        /// Specify left turn command for heading clearances
+        /// </summary>
+        public static readonly Instruction TURN_LEFT = new Instruction(8, "l");
+        /// <summary>
+        /// Specify right turn command for heading clearances
+        /// </summary>
+        public static readonly Instruction TURN_RIGHT = new Instruction(9, "r");
         /// <summary>
         /// Adds edge markers and radar circles to the map
         /// </summary>
-        public static readonly Instruction SCALE = new Instruction(6, "SCALE");
+        public static readonly Instruction SCALE = new Instruction(10, "SCALE");
         /// <summary>
         /// Command designator for changing aircraft speed
         /// </summary>
-        public static readonly Instruction SPEED = new Instruction(6, "s");
+        public static readonly Instruction SPEED = new Instruction(11, "s");
         /// <summary>
         /// Command designator for aircraft takeoff clearance
         /// </summary>
-        public static readonly Instruction TAKEOFF = new Instruction(7, "t");
+        public static readonly Instruction TAKEOFF = new Instruction(12, "t");
 
         /// <summary>
         /// Creates a new <see cref="Instruction"/> enum

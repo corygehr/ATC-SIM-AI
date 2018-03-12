@@ -1,6 +1,8 @@
 ﻿using AtcSimController.Controller;
 using AtcSimController.Controller.Departures;
+using AtcSimController.Resources;
 using OpenQA.Selenium;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,12 +11,12 @@ namespace AtcSimController
     /// <summary>
     /// Simulation controller class
     /// </summary>
-    sealed class Supervisor
+    sealed class Supervisor : IDisposable
     {
         /// <summary>
         /// Cancellation Token which can be used to end the process
         /// </summary>
-        private CancellationToken _cancellationToken;
+        private CancellationTokenSource _cancellationTokenSource;
         /// <summary>
         /// Controller used to direct air traffic
         /// </summary>
@@ -41,8 +43,11 @@ namespace AtcSimController
         /// <summary>
         /// Creates a new <see cref="Supervisor"/> class to run the simulation
         /// </summary>
-        public Supervisor(IWebDriver driver, CancellationToken cancellationToken)
+        /// <param name="driver">Web Driver</param>
+        public Supervisor(IWebDriver driver)
         {
+            // Store local variables
+            this._cancellationTokenSource = new CancellationTokenSource();
             this._driver = driver;
             // Create new Scope object
             this._scope = new RadarScope(driver);
@@ -58,14 +63,29 @@ namespace AtcSimController
             // Loop scope refreshing
             await Task.Run(() =>
             {
-                while (!this._cancellationToken.IsCancellationRequested)
+                while (!this._cancellationTokenSource.Token.IsCancellationRequested)
                 {
-                    this._scope.Refresh();
-                    this._controller.DoRouting();
-                    // Pause before doing next refresh
-                    Thread.Sleep(1000);
+                    try
+                    {
+                        this._scope.Refresh();
+                        this._controller.DoRouting();
+                        // Pause before doing next refresh
+                        Thread.Sleep(1000);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Error.WriteLine(String.Format(Messages.ERROR_BASE, Messages.ERROR_GENERIC));
+                        Console.Error.WriteLine(String.Format(Messages.ADDITIONAL_INFO, ex.Message));
+                        this._cancellationTokenSource.Cancel();
+                    }
                 }
             });
+        }
+
+        public void Dispose()
+        {
+            // Dispose objects
+            this._cancellationTokenSource.Dispose();
         }
     }
 }

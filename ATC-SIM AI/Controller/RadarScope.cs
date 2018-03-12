@@ -1,10 +1,10 @@
 ﻿using AtcSimController.SiteReflection;
 using AtcSimController.SiteReflection.Models;
 using AtcSimController.SiteReflection.Resources;
+
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace AtcSimController.Controller
 {
@@ -116,6 +116,9 @@ namespace AtcSimController.Controller
             this._fetchWaypoints();
             this._fetchAircraftModels();
             this._fetchAirportData();
+            // Send "SCALE" command to increase usability of scope
+            Directive scale = new Directive("SCALE");
+            scale.Execute(this._driver);
         }
 
         /// <summary>
@@ -207,54 +210,58 @@ namespace AtcSimController.Controller
                 // Parse flight data to ReadOnlyCollection
                 IDictionary<string, object> data = (IDictionary<string, object>)flt.Value;
 
-                // Convert values to proper types and add new flight to the array
-                string aircraft = Convert.ToString(data["0"]);
-                int modelInd = Convert.ToInt32(data["1"]);
-                int x = Convert.ToInt32(data["2"]);
-                int y = Convert.ToInt32(data["3"]);
-                int z = Convert.ToInt32(data["4"]);
-                int hdg = Convert.ToInt32(data["5"]);
-                int spd = Convert.ToInt32(data["6"]);
-                int fltMode = Convert.ToInt32(data["7"]); // 1 when heading, 2 when nav
-                int hdgClr = Convert.ToInt32(data["8"]);
-                int altClr = Convert.ToInt32(data["9"]);
-                int spdClr = Convert.ToInt32(data["10"]);
-                string navClr = Convert.ToString(data["11"]);
-                int navClrId = Convert.ToInt32(data["12"]);
-                int dest = Convert.ToInt32(data["13"]);
-                int lr = Convert.ToInt32(data["14"]);
-                int timerSec = Convert.ToInt32(data["15"]);
-                char timerMode = Convert.ToChar(data["16"]);
-                bool expedite = Convert.ToBoolean(data["17"]);
-                bool conflict = Convert.ToBoolean(data["18"]);
-                string airline = Convert.ToString(data["19"]);
-
-                Waypoint clearedDest = null;
-
-                if(navClrId >= 0)
+                // Ignore any flight which has null data - it may still be loading
+                if(data != null)
                 {
-                    clearedDest = this._waypoints[navClrId];
+                    // Convert values to proper types and add new flight to the array
+                    string aircraft = Convert.ToString(data["0"]);
+                    int modelInd = Convert.ToInt32(data["1"]);
+                    int x = Convert.ToInt32(data["2"]);
+                    int y = Convert.ToInt32(data["3"]);
+                    int z = Convert.ToInt32(data["4"]);
+                    int hdg = Convert.ToInt32(data["5"]);
+                    int spd = Convert.ToInt32(data["6"]);
+                    int fltMode = Convert.ToInt32(data["7"]); // 1 when heading, 2 when nav
+                    int hdgClr = Convert.ToInt32(data["8"]);
+                    int altClr = Convert.ToInt32(data["9"]);
+                    int spdClr = Convert.ToInt32(data["10"]);
+                    string navClr = Convert.ToString(data["11"]);
+                    int navClrId = Convert.ToInt32(data["12"]);
+                    int dest = Convert.ToInt32(data["13"]);
+                    int lr = Convert.ToInt32(data["14"]);
+                    int timerSec = Convert.ToInt32(data["15"]);
+                    char timerMode = Convert.ToChar(data["16"]);
+                    bool expedite = Convert.ToBoolean(data["17"]);
+                    bool conflict = Convert.ToBoolean(data["18"]);
+                    string airline = Convert.ToString(data["19"]);
+
+                    Waypoint clearedDest = null;
+
+                    if (navClrId >= 0)
+                    {
+                        clearedDest = this._waypoints[navClrId];
+                    }
+
+                    Flight newFlt = new Flight(
+                        flightNum,
+                        airline,
+                        aircraft,
+                        this._aircraft[modelInd],
+                        (Status)timerMode,
+                        this._waypoints[dest],
+                        clearedDest,
+                        z,
+                        altClr,
+                        spd,
+                        spdClr,
+                        hdg,
+                        hdgClr,
+                        x,
+                        y
+                    );
+
+                    this._flightDict[flightNum] = newFlt;
                 }
-
-                Flight newFlt = new Flight(
-                    flightNum,
-                    airline,
-                    aircraft,
-                    this._aircraft[modelInd],
-                    (Status)timerMode,
-                    this._waypoints[dest],
-                    clearedDest,
-                    z,
-                    altClr,
-                    spd,
-                    spdClr,
-                    hdg,
-                    hdgClr,
-                    x,
-                    y
-                );
-
-                this._flightDict[flightNum] = newFlt;
             }
         }
 

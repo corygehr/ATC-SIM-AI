@@ -139,8 +139,9 @@ namespace AtcSimController
                         ((IJavaScriptExecutor) driver).ExecuteScript("fnCloseModal();");
                     }
 
-                    // Wait for simulation to finish loading
-                    Thread.Sleep(3000);
+                    // Load complete
+                    Console.WriteLine(Messages.ENVIRONMENT_READY);
+                    Console.WriteLine();
                 }
                 catch (NoSuchElementException ex)
                 {
@@ -159,35 +160,23 @@ namespace AtcSimController
 
                 #region Traffic Controller Active
 
-                // Create cancellation token to stop the process if necessary
-                CancellationTokenSource cTokenSource = new CancellationTokenSource();
-
                 // Create Supervisor to run simulation
-                Supervisor simulation = new Supervisor(driver, cTokenSource.Token);
+                Supervisor simulation = new Supervisor(driver);
 
                 // Start simulation
-                try
-                {
-                    // Simulation runs on the main thread, creates others within
-                    simulation.Run().Wait();
-                }
-                catch(Exception ex)
-                {
-                    Console.Error.WriteLine(String.Format(Messages.ERROR_BASE, Messages.ERROR_GENERIC));
-                    Console.Error.WriteLine(String.Format(Messages.ADDITIONAL_INFO, ex.Message));
-                }
-                finally
-                {
-                    driver.Quit();
-                    Console.WriteLine(String.Format("\n--{0}--", Messages.SELENIUM_DISCONNECTED));
+                // Simulation runs on the main thread, creates others within
+                simulation.Run().Wait();
 
-                    // Disposables
-                    cTokenSource.Dispose();
+                // Post-simulation processing
+                driver.Quit();
+                Console.WriteLine(String.Format("\n--{0}--", Messages.SELENIUM_DISCONNECTED));
 
-                    // Output final scores
-                    Console.WriteLine(simulation.Scope.Score);
-                }
+                // Disposables
+                simulation.Dispose();
+                driver.Dispose();
 
+                // Output final scores
+                Console.WriteLine(simulation.Scope.Score);
                 #endregion
             }
             else

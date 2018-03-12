@@ -1,11 +1,9 @@
 ﻿using AtcSimController.Resources;
 using AtcSimController.SiteReflection.Models;
-using AtcSimController.SiteReflection.Resources;
 using AtcSimController.SiteReflection.SimConnector;
 
 using OpenQA.Selenium;
 using System;
-using System.Threading;
 
 namespace AtcSimController.Controller
 {
@@ -13,6 +11,7 @@ namespace AtcSimController.Controller
     {
         private Instruction _action;
         private string _command;
+        private Instruction _direction;
         private Boolean _executed = false;
         private Boolean _expedite = false;
         private string _explicitCommand;
@@ -79,12 +78,14 @@ namespace AtcSimController.Controller
         /// </summary>
         /// <param name="flight">Target flight</param>
         /// <param name="destination">New destination</param>
+        /// <param name="direction">Optionally specify direction to turn</param>
         /// <returns>Destination Directive</returns>
-        public static Directive ChangeDestination(Flight flight, Waypoint destination)
+        public static Directive ChangeDestination(Flight flight, Waypoint destination, Instruction direction = null)
         {
             return new Directive
             {
                 _action = Instruction.DESTINATION,
+                _direction = direction,
                 _flight = flight,
                 _value = destination.Name
             };
@@ -123,7 +124,12 @@ namespace AtcSimController.Controller
 
                 if(!String.IsNullOrEmpty(_value))
                 {
-                    this._command = String.Join(" ", this._command, _value);
+                    this._command = String.Join(" ", this._command, this._value);
+                }
+
+                if(this._direction != null)
+                {
+                    this._command = String.Join(" ", this._command, this._direction);
                 }
                 
                 // Expedite command (if requested)
@@ -146,6 +152,22 @@ namespace AtcSimController.Controller
         }
 
         /// <summary>
+        /// Instructs an aircraft to hold at a <see cref="Waypoint"/>
+        /// </summary>
+        /// <param name="flight">Target flight</param>
+        /// <param name="destination">Target destination</param>
+        /// <returns></returns>
+        public static Directive Hold(Flight flight, Waypoint destination)
+        {
+            return new Directive
+            {
+                _action = Instruction.HOLD,
+                _flight = flight,
+                _value = destination.Name
+            };
+        }
+
+        /// <summary>
         /// Sets landing information for this command
         /// </summary>
         /// <param name="flight">Target flight</param>
@@ -158,6 +180,20 @@ namespace AtcSimController.Controller
                 _action = Instruction.LAND,
                 _flight = flight,
                 _value = runway.Name
+            };
+        }
+
+        /// <summary>
+        /// Lineup and Wait on Runway instruction
+        /// </summary>
+        /// <param name="flight">Target flight</param>
+        /// <returns>Lineup and Wait Directive</returns>
+        public static Directive LineupWait(Flight flight)
+        {
+            return new Directive
+            {
+                _action = Instruction.LINEUP_WAIT,
+                _flight = flight
             };
         }
 

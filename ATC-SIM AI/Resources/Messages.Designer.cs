@@ -97,7 +97,7 @@ namespace AtcSimController.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loading radar scope.
+        ///   Looks up a localized string similar to Loading radar scope....
         /// </summary>
         internal static string ENVIRONMENT_LOAD {
             get {
@@ -111,6 +111,15 @@ namespace AtcSimController.Resources {
         internal static string ENVIRONMENT_LOAD_FAIL {
             get {
                 return ResourceManager.GetString("ENVIRONMENT_LOAD_FAIL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simulation ready!.
+        /// </summary>
+        internal static string ENVIRONMENT_READY {
+            get {
+                return ResourceManager.GetString("ENVIRONMENT_READY", resourceCulture);
             }
         }
         

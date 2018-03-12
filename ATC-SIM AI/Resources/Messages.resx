@@ -134,12 +134,16 @@
     <comment>Credit line displayed at application start.</comment>
   </data>
   <data name="ENVIRONMENT_LOAD" xml:space="preserve">
-    <value>Loading radar scope</value>
+    <value>Loading radar scope...</value>
     <comment>Loading radar scope environment.</comment>
   </data>
   <data name="ENVIRONMENT_LOAD_FAIL" xml:space="preserve">
     <value>One or more required form elements could not be found. Application will now exit.</value>
     <comment>Failed to find the form elements indicative of the radar scope environment successfully loading.</comment>
+  </data>
+  <data name="ENVIRONMENT_READY" xml:space="preserve">
+    <value>Simulation ready!</value>
+    <comment>Simulation finished loading.</comment>
   </data>
   <data name="ENVIRONMENT_SETUP" xml:space="preserve">
     <value>Loading environment details</value>

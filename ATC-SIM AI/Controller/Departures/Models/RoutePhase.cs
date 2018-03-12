@@ -21,6 +21,10 @@ namespace AtcSimController.Controller.Departures.Models
         /// Enum lookup object
         /// </summary>
         private static Dictionary<string, RoutePhase> _instance = new Dictionary<string, RoutePhase>();
+        /// <summary>
+        /// Airport data used to determine phase (when required)
+        /// </summary>
+        public static Airport LocalAirport = null;
 
         /// <summary>
         /// Aircraft is aborting their takeoff
@@ -42,6 +46,10 @@ namespace AtcSimController.Controller.Departures.Models
         /// Aircraft is landing on the runway
         /// </summary>
         public static RoutePhase LANDING = new RoutePhase(5, "LANDING");
+        /// <summary>
+        /// Aircraft is being loaded into the simulation
+        /// </summary>
+        public static RoutePhase LOADING = new RoutePhase(13, "LOADING");
         /// <summary>
         /// Aircraft has left the ground as part of their takeoff procedure
         /// </summary>
@@ -94,6 +102,43 @@ namespace AtcSimController.Controller.Departures.Models
         }
 
         /// <summary>
+        /// Returns true if the provided phase describes an aircraft which is enroute
+        /// </summary>
+        /// <param name="input">Phase to check</param>
+        /// <returns>True if enroute</returns>
+        public static bool IsEnroutePhase(RoutePhase input)
+        {
+            return input == DEPARTURE
+                || input == ESTABLISHED;
+        }
+
+        /// <summary>
+        /// Returns true if the provided phase describes a landing aircraft
+        /// </summary>
+        /// <param name="input">Phase to check</param>
+        /// <returns>True if landing</returns>
+        public static bool IsLandingPhase(RoutePhase input)
+        {
+            return input == LANDING
+                || input == ON_APPROACH
+                || input == ON_FINAL
+                || input == STOPPING;
+        }
+
+        /// <summary>
+        /// Returns true if the provided phase describes an aircraft which is on the ground or taking off
+        /// </summary>
+        /// <param name="input">Phase to check</param>
+        /// <returns>True if taking off</returns>
+        public static bool IsTakeoffPhase(RoutePhase input)
+        {
+            return input == READY_TAKEOFF
+                || input == LINEUP_WAIT
+                || input == ROLLING
+                || input == LIFTOFF;
+        }
+
+        /// <summary>
         /// String to enum value conversion
         /// </summary>
         /// <param name="input">String to process</param>
@@ -116,7 +161,7 @@ namespace AtcSimController.Controller.Departures.Models
         /// <param name="target">Flight to be analyzed</param>
         /// <param name="airport">Airport object</param>
         /// <returns>Current flight phase</returns>
-        public static RoutePhase DeterminePhase(Flight target, Airport airport)
+        public static RoutePhase DeterminePhase(Flight target)
         {
             switch(target.Status)
             {
@@ -124,15 +169,24 @@ namespace AtcSimController.Controller.Departures.Models
                     return READY_TAKEOFF;
 
                 case Status.HOLD:
-                    return LINEUP_WAIT;
+                    if(target.Altitude == LocalAirport.Altitude)
+                    {
+                        // Aircraft is still on the ground
+                        return LINEUP_WAIT;
+                    }
+                    else
+                    {
+                        // Aircraft is holding at a waypoint
+                        return DEPARTURE;
+                    }
 
                 case Status.TAKEOFF:
-                    if(target.Altitude == airport.Altitude && target.ClearedDestination.Type == WaypointType.RUNWAY)
+                    if(target.Altitude == LocalAirport.Altitude && target.ClearedDestination.Type == WaypointType.RUNWAY)
                     {
                         // Takeoff status with airport altitude is still rolling
                         return ROLLING;
                     }
-                    else if(target.Altitude > airport.Altitude && target.Altitude < (airport.Altitude + 1000))
+                    else if(target.Altitude > LocalAirport.Altitude && target.Altitude < (LocalAirport.Altitude + Constants.VERTICAL_SEPARATION_MIN_FT))
                     {
                         // Aircraft must be over 1000ft above field to begin executing turns
                         return LIFTOFF;
@@ -148,12 +202,12 @@ namespace AtcSimController.Controller.Departures.Models
                         // Aircraft is being routed to the airport
                         return ON_APPROACH;
                     }
-                    else if(target.ClearedDestination.Type == WaypointType.RUNWAY && target.Altitude != airport.Altitude && target.ClearedAltitude == airport.Altitude)
+                    else if(target.ClearedDestination.Type == WaypointType.RUNWAY && target.Altitude != LocalAirport.Altitude && target.ClearedAltitude == LocalAirport.Altitude)
                     {
                         // Runway as target indicates aircraft is on final
                         return LANDING;
                     }
-                    else if(target.ClearedDestination.Type == WaypointType.RUNWAY && target.Altitude == airport.Altitude && target.ClearedAltitude == airport.Altitude)
+                    else if(target.ClearedDestination.Type == WaypointType.RUNWAY && target.Altitude == LocalAirport.Altitude && target.ClearedAltitude == LocalAirport.Altitude)
                     {
                         // Aircraft is coming to a stop
                         return STOPPING;
@@ -162,6 +216,9 @@ namespace AtcSimController.Controller.Departures.Models
                     {
                         return ESTABLISHED;
                     }
+
+                case Status.LOADING:
+                    return LOADING;
 
                 default:
                     throw new ArgumentException(String.Format("Unknown Status '{0}' provided. Flight Detail: {1}", target.Status, target.ToString()));
