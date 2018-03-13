@@ -1,10 +1,12 @@
 ﻿using OpenQA.Selenium;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AtcSimController.SiteReflection
 {
     /// <summary>
     /// Helper class to capture Browser objects
     /// </summary>
+    [ExcludeFromCodeCoverage]
     sealed class BrowserCapture
     {
         private IWebDriver _driver;

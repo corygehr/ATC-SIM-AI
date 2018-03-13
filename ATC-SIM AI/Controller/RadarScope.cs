@@ -17,6 +17,7 @@ namespace AtcSimController.Controller
         private int[] _activeRunwayIndices = new int[0];
         private List<Waypoint> _activeRunways = new List<Waypoint>();
         private List<AircraftSpecification> _aircraft = new List<AircraftSpecification>();
+        private List<Airway> _airways = new List<Airway>();
         private Airport _airport;
         private int _boundaryEast { get; set; }
         private int _boundaryNorth { get; set; }
@@ -52,6 +53,16 @@ namespace AtcSimController.Controller
             get
             {
                 return this._airport;
+            }
+        }
+        /// <summary>
+        /// Airway List (potential entry points for aircraft)
+        /// </summary>
+        public List<Airway> Airways
+        {
+            get
+            {
+                return this._airways;
             }
         }
         /// <summary>
@@ -186,10 +197,11 @@ namespace AtcSimController.Controller
             this._dataBroker = new BrowserCapture(driver);
             // Get initial data sources
             this._fetchRadarParameters();
+            this._fetchAirways();
             this._fetchWaypoints();
             this._fetchAircraftModels();
             this._fetchAirportData();
-            // Send "SCALE" command to increase usability of scope
+            // Send "SCALE" command to add edge markers and nav circles
             Directive scale = new Directive("SCALE");
             scale.Execute(this._driver);
         }
@@ -204,7 +216,7 @@ namespace AtcSimController.Controller
         }
 
         /// <summary>
-        /// Determines the distance between two objects on the <see cref="RadarScope"/>
+        /// Determines the distance between a flight and waypoint on the <see cref="RadarScope"/>
         /// </summary>
         /// <param name="a">Start object</param>
         /// <param name="b">End object</param>
@@ -213,6 +225,8 @@ namespace AtcSimController.Controller
         /// This is provided to the user because the simulator has its own function to compute this. Hence,
         /// this function mirrors it to give controllers a value which is consistent with what the 
         /// simulation would provide.
+        /// Additionally, the X&Y offset values only seem to apply to measuring distances between a Flight and 
+        /// Waypoint.
         /// </remarks>
         public double Distance(Flight a, Waypoint b)
         {
@@ -232,25 +246,7 @@ namespace AtcSimController.Controller
         /// this function mirrors it to give controllers a value which is consistent with what the 
         /// simulation would provide.
         /// </remarks>
-        public double Distance(Flight a, Flight b)
-        {
-            return Math.Sqrt(
-                Math.Pow(a.Location.x - b.Location.y, 2) + Math.Pow((a.Location.y - b.Location.y), 2)
-            );
-        }
-
-        /// <summary>
-        /// Determines the distance between two objects on the <see cref="RadarScope"/>
-        /// </summary>
-        /// <param name="a">Start object</param>
-        /// <param name="b">End object</param>
-        /// <returns>Distance between objects</returns>
-        /// <remarks>
-        /// This is provided to the user because the simulator has its own function to compute this. Hence,
-        /// this function mirrors it to give controllers a value which is consistent with what the 
-        /// simulation would provide.
-        /// </remarks>
-        public double Distance(Waypoint a, Waypoint b)
+        public double Distance(ScopeObject a, ScopeObject b)
         {
             return Math.Sqrt(
                 Math.Pow(a.Location.x - b.Location.y, 2) + Math.Pow((a.Location.y - b.Location.y), 2)
@@ -295,6 +291,29 @@ namespace AtcSimController.Controller
 
             // Create Airport object
             this._airport = new Airport(elevation, runways);
+        }
+
+        /// <summary>
+        /// Fetches all potential locations where a <see cref="Flight"/> could enter the scope
+        /// </summary>
+        private void _fetchAirways()
+        {
+            // Get list of Airways
+            JSArray rawAirways = new JSArray(this._dataBroker.FetchRawJSVariable(JSVariables.AIRWAYS));
+
+            // Add models to local airways list
+            for (int i = 0; i < rawAirways.RawData.Count; i++)
+            {
+                // Parse with JSArray yet again...
+                JSArray rawAirway = new JSArray(rawAirways.RawData[i]);
+
+                // Add to airways list
+                this._airways.Add(new Airway(
+                    Convert.ToInt32(rawAirway.RawData[0]),
+                    Convert.ToInt32(rawAirway.RawData[1]),
+                    Convert.ToInt32(rawAirway.RawData[2])
+                ));
+            }
         }
 
         /// <summary>

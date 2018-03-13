@@ -1,21 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AtcSimController.SiteReflection.Models
 {
     /// <summary>
     /// Airport object
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public sealed class Airport
     {
         #region Internal accessors
         /// <summary>
         /// Airfield altitude
         /// </summary>
-        private int _altitude { get; set; }
+        private int _altitude;
         /// <summary>
         /// All airport runways
         /// </summary>
-        private List<Waypoint> _runways { get; set; }
+        private List<Waypoint> _runways;
         #endregion
         #region Public accessors
         /// <summary>

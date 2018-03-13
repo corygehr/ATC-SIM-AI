@@ -129,6 +129,10 @@
     <value>intFieldElev</value>
     <comment>Airfield base altitude.</comment>
   </data>
+  <data name="AIRWAYS" xml:space="preserve">
+    <value>G_arrAirways</value>
+    <comment>Airways data array name.</comment>
+  </data>
   <data name="BOUNDARY_EAST" xml:space="preserve">
     <value>intTCA_Right</value>
     <comment>Eastern Boundary X-coordinate.</comment>

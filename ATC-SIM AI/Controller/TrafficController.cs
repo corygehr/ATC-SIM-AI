@@ -1,11 +1,13 @@
 ﻿using AtcSimController.Resources;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AtcSimController.Controller
 {
     /// <summary>
     /// Traffic Controller base class
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public abstract class TrafficController
     {
         /// <summary>

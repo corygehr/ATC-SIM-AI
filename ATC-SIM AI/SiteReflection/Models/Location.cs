@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AtcSimController.SiteReflection.Models
 {
     /// <summary>
     /// Location on the Radar Scope
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public sealed class Location
     {
         /// <summary>

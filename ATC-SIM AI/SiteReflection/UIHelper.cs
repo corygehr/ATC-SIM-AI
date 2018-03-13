@@ -1,11 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AtcSimController.SiteReflection.SimConnector
 {
+    /// <summary>
+    /// Utility class for working with the ATC-SIM User Interface
+    /// </summary>
+    [ExcludeFromCodeCoverage]
     sealed class UIHelper
     {
         /// <summary>

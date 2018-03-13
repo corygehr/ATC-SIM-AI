@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="SiteReflection\Models\AircraftSpecification.cs" />
     <Compile Include="Controller\Directive.cs" />
+    <Compile Include="SiteReflection\Models\Airway.cs" />
     <Compile Include="SiteReflection\Models\Flight.cs" />
     <Compile Include="SiteReflection\Models\Airport.cs" />
     <Compile Include="SiteReflection\Constants.cs" />

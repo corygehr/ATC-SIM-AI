@@ -88,6 +88,15 @@ namespace AtcSimController.SiteReflection.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to G_arrAirways.
+        /// </summary>
+        internal static string AIRWAYS {
+            get {
+                return ResourceManager.GetString("AIRWAYS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to intTCA_Right.
         /// </summary>
         internal static string BOUNDARY_EAST {

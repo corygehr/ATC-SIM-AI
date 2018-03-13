@@ -1,8 +1,11 @@
-﻿namespace AtcSimController.SiteReflection.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace AtcSimController.SiteReflection.Models
 {
     /// <summary>
     /// Parent class for any object that can appear on the Radar Scope
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public abstract class ScopeObject
     {
         protected Location _location;
