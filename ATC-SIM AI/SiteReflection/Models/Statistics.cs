@@ -25,11 +25,11 @@
         
         public override string ToString()
         {
-            return "Landings:" + this.Landings
-                + ";Handoffs:" + this.Handoffs
-                + ";ImproperExits:" + this.ImproperExits
-                + ";MissedApproaches:" + this.MissedApproaches
-                + ";ViolationSeconds:" + this.ViolationSeconds;
+            return "Landings=" + this.Landings
+                + ";Handoffs=" + this.Handoffs
+                + ";ImproperExits=" + this.ImproperExits
+                + ";MissedApproaches=" + this.MissedApproaches
+                + ";ViolationSeconds=" + this.ViolationSeconds;
         }
 
         /// <summary>

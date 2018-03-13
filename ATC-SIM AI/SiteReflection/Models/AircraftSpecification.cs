@@ -68,7 +68,7 @@ namespace AtcSimController.SiteReflection.Models
 
         public override string ToString()
         {
-            return String.Format("APP:{0};CRU:{1};LFT:{2}",
+            return String.Format("ApproachSpeed={0};CruiseSpeed={1};LiftoffSpeed={2}",
                 this._approachSpeed,
                 this._cruiseSpeed,
                 this._liftoffSpeed);

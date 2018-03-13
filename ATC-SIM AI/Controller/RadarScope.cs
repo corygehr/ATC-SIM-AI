@@ -499,14 +499,7 @@ namespace AtcSimController.Controller
 
         public override string ToString()
         {
-            string ret = "WindHdg: " + this._windHdg;
-            ret += "; Active Runways:";
-            foreach (Waypoint rw in this._activeRunways)
-            {
-                ret += " " + rw.Name;
-            }
-
-            return ret;
+            return "WindHeading=" + this._windHdg + ";ActiveRunways=" + String.Join(",", this._activeRunways);
         }
     }
 }
