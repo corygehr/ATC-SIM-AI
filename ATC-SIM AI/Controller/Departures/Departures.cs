@@ -4,6 +4,7 @@ using AtcSimController.SiteReflection.Models;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AtcSimController.Controller.Departures
 {
@@ -28,10 +29,6 @@ namespace AtcSimController.Controller.Departures
         /// Default takeoff altitude
         /// </summary>
         private const int TAKEOFF_ALTITUDE = 7000;
-        /// <summary>
-        /// Minimum altitude of departing aircraft before another can begin takeoff
-        /// </summary>
-        private const int TAKEOFF_THRESHOLD = 500;
 
         /// <summary>
         /// Creates a new <see cref="Departures"/> controller
@@ -184,8 +181,8 @@ namespace AtcSimController.Controller.Departures
             // Check if there is currently an aircraft taking off
             if (this._currentTakeoff != null)
             {
-                // Verify current departing aircraft has reached min safe takeoff threshold
-                return Scope.Flights[this._currentTakeoff].Altitude - Scope.Airport.Altitude > TAKEOFF_THRESHOLD;
+                // Verify current departing aircraft is at or above FreeFlight altitude
+                return Scope.Flights[this._currentTakeoff].Altitude - Scope.Airport.Altitude > Constants.FREEFLIGHT_THRESHOLD_FT;
             }
 
             return true;
