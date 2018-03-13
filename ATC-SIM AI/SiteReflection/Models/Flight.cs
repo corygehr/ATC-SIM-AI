@@ -224,18 +224,7 @@ namespace AtcSimController.SiteReflection.Models
                 return this._heading;
             }
         }
-
-        /// <summary>
-        /// Returns true if the flight is visible on the radar scope
-        /// </summary>
-        public bool OnScope
-        {
-            get
-            {
-                return this._location != null;
-            }
-        }
-
+        
         /// <summary>
         /// Returns the current speed of this flight
         /// </summary>
@@ -244,6 +233,17 @@ namespace AtcSimController.SiteReflection.Models
             get
             {
                 return this._speed;
+            }
+        }
+
+        /// <summary>
+        /// Flight Status
+        /// </summary>
+        public Status Status
+        {
+            get
+            {
+                return this._type;
             }
         }
 
@@ -266,17 +266,6 @@ namespace AtcSimController.SiteReflection.Models
             get
             {
                 return this._direction;
-            }
-        }
-
-        /// <summary>
-        /// Flight Status
-        /// </summary>
-        public Status Status
-        {
-            get
-            {
-                return this._type;
             }
         }
 

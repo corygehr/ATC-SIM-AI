@@ -4,7 +4,6 @@ using AtcSimController.SiteReflection.Models;
 
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace AtcSimController.Controller.Departures
 {
@@ -14,17 +13,17 @@ namespace AtcSimController.Controller.Departures
     public class Departures : TrafficController
     {
         /// <summary>
-        /// Flights queued for takeoff
+        /// Callsign of flight currently taking off
         /// </summary>
-        private Queue<Flight> _takeoffQueue = new Queue<Flight>();
+        private string _currentTakeoff = null;
         /// <summary>
         /// Aircraft holding on runway(s) for takeoff
         /// </summary>
         private Dictionary<string, string> _runwayReservations = new Dictionary<string, string>();
         /// <summary>
-        /// Callsign of flight currently taking off
+        /// Flights queued for takeoff
         /// </summary>
-        private string _currentTakeoff = null;
+        private Queue<Flight> _takeoffQueue = new Queue<Flight>();
         /// <summary>
         /// Default takeoff altitude
         /// </summary>
