@@ -7,7 +7,6 @@ using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Chrome;
 using System;
-using System.Threading;
 
 namespace AtcSimController
 {

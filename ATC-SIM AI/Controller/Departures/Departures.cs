@@ -38,7 +38,7 @@ namespace AtcSimController.Controller.Departures
         /// <param name="scope">Radar Scope object</param>
         public Departures(RadarScope scope) : base(scope)
         {
-            // Set airport for determining phase
+            // Set airport for determining phases
             RoutePhase.LocalAirport = Scope.Airport;
 
             // Create hold object for aircraft waiting on runways
@@ -50,9 +50,10 @@ namespace AtcSimController.Controller.Departures
 
         public override void DoRouting()
         {
-            // Segment flights into their phase to reduce number of enumerations and appropriately target functions which should route them
+            // TODO
+            // Categorize flights by phase to reduce number of enumerations
 
-            // Categorize new flights
+            // Add new flights
             this._processNewFlights();
             // Route existing aircraft
             this._routeDepartures();
@@ -149,7 +150,7 @@ namespace AtcSimController.Controller.Departures
                 RoutePhase phase = RoutePhase.DeterminePhase(flight);
                 if (RoutePhase.IsEnroutePhase(phase))
                 {
-                    if(flight.Altitude >= Constants.HANDOFF_MIN_ALTITUDE_FT && (flight.Status == Status.HOLD || (flight.ClearedDestination != null && flight.Destination.Name != flight.ClearedDestination.Name)))
+                    if(flight.Altitude >= Constants.HANDOFF_MIN_ALTITUDE_FT && phase == RoutePhase.HOLD_WAYPOINT)
                     {
                         // Aircraft meets handoff criteria and is holding - clear to destination
                         Scope.AddDirective(Directive.ChangeDestination(flight, flight.Destination));

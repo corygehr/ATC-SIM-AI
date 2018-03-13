@@ -214,26 +214,26 @@ namespace AtcSimController.Controller
                 if(data != null)
                 {
                     // Convert values to proper types and add new flight to the array
-                    string aircraft = Convert.ToString(data["0"]);
-                    int modelInd = Convert.ToInt32(data["1"]);
-                    int x = Convert.ToInt32(data["2"]);
-                    int y = Convert.ToInt32(data["3"]);
-                    int z = Convert.ToInt32(data["4"]);
-                    int hdg = Convert.ToInt32(data["5"]);
-                    int spd = Convert.ToInt32(data["6"]);
-                    int fltMode = Convert.ToInt32(data["7"]); // 1 when heading, 2 when nav
-                    int hdgClr = Convert.ToInt32(data["8"]);
-                    int altClr = Convert.ToInt32(data["9"]);
-                    int spdClr = Convert.ToInt32(data["10"]);
-                    string navClr = Convert.ToString(data["11"]);
-                    int navClrId = Convert.ToInt32(data["12"]);
-                    int dest = Convert.ToInt32(data["13"]);
-                    int lr = Convert.ToInt32(data["14"]);
-                    int timerSec = Convert.ToInt32(data["15"]);
-                    char timerMode = Convert.ToChar(data["16"]);
-                    bool expedite = Convert.ToBoolean(data["17"]);
-                    bool conflict = Convert.ToBoolean(data["18"]);
-                    string airline = Convert.ToString(data["19"]);
+                    string aircraft = Convert.ToString(data["0"]); // aircraft type
+                    int modelInd = Convert.ToInt32(data["1"]); // LJH = Light, Jumbo, Heavy?
+                    int x = Convert.ToInt32(data["2"]); // float x
+                    int y = Convert.ToInt32(data["3"]); // float y
+                    int z = Convert.ToInt32(data["4"]); // float z
+                    int hdg = Convert.ToInt32(data["5"]); // heading
+                    int spd = Convert.ToInt32(data["6"]); // v
+                    int fltMode = Convert.ToInt32(data["7"]); // flight mode
+                    int hdgClr = Convert.ToInt32(data["8"]); // x/y clearance
+                    int altClr = Convert.ToInt32(data["9"]); // z clearance
+                    int spdClr = Convert.ToInt32(data["10"]); // v clearance
+                    string navClr = Convert.ToString(data["11"]); // rwy/nav clearance
+                    int navClrId = Convert.ToInt32(data["12"]); // rwy/nav id
+                    int dest = Convert.ToInt32(data["13"]); // destination
+                    int lr = Convert.ToInt32(data["14"]); // L/R
+                    int timerSec = Convert.ToInt32(data["15"]); // timer seconds
+                    char timerMode = Convert.ToChar(data["16"]); // timer mode
+                    bool expedite = Convert.ToBoolean(data["17"]); // expedite
+                    bool conflict = Convert.ToBoolean(data["18"]); // conflict alert
+                    string airline = Convert.ToString(data["19"]); // airline ICAO code
 
                     Waypoint clearedDest = null;
 
@@ -248,6 +248,7 @@ namespace AtcSimController.Controller
                         aircraft,
                         this._aircraft[modelInd],
                         (Status)timerMode,
+                        (FlightMode)fltMode,
                         this._waypoints[dest],
                         clearedDest,
                         z,

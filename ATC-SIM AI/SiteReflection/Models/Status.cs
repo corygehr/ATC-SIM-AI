@@ -8,7 +8,7 @@
         ARRIVAL = 'A',
         DEPARTURE = 'D',
         HOLD = 'H',
-        LOADING = 'W',
-        TAKEOFF = 'T'
+        TAKEOFF = 'T',
+        WAIT = 'W'
     }
 }

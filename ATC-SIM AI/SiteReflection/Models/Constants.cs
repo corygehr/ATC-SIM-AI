@@ -9,6 +9,13 @@
     public static class Constants
     {
         /// <summary>
+        /// Altitude above field elevation at which a flight is no longer considered "taking off" (in feet)
+        /// </summary>
+        /// <remarks>
+        /// Inferred from game scripts
+        /// </remarks>
+        public static readonly int FREEFLIGHT_THRESHOLD_FT = 800;
+        /// <summary>
         /// Minimum distance between aircraft and navpoint for handoff (in miles)
         /// </summary>
         public static readonly int HANDOFF_MIN_DISTANCE_MI = 1;

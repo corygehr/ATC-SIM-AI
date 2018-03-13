@@ -43,13 +43,13 @@ namespace AtcSimController.Controller.Departures.Models
         /// </summary>
         public static RoutePhase GO_AROUND = new RoutePhase(4, "GO_AROUND");
         /// <summary>
+        /// Aircraft is holding at a waypoint
+        /// </summary>
+        public static RoutePhase HOLD_WAYPOINT = new RoutePhase(13, "HOLD_WAYPOINT");
+        /// <summary>
         /// Aircraft is landing on the runway
         /// </summary>
         public static RoutePhase LANDING = new RoutePhase(5, "LANDING");
-        /// <summary>
-        /// Aircraft is being loaded into the simulation
-        /// </summary>
-        public static RoutePhase LOADING = new RoutePhase(13, "LOADING");
         /// <summary>
         /// Aircraft has left the ground as part of their takeoff procedure
         /// </summary>
@@ -74,10 +74,6 @@ namespace AtcSimController.Controller.Departures.Models
         /// Aircraft is taking off, rolling down the runway
         /// </summary>
         public static RoutePhase ROLLING = new RoutePhase(11, "ROLLING");
-        /// <summary>
-        /// Aircraft is coming to a stop on the runway
-        /// </summary>
-        public static RoutePhase STOPPING = new RoutePhase(12, "STOPPING");
 
         /// <summary>
         /// Creates a new <see cref="RoutePhase"/> enum object
@@ -109,7 +105,8 @@ namespace AtcSimController.Controller.Departures.Models
         public static bool IsEnroutePhase(RoutePhase input)
         {
             return input == DEPARTURE
-                || input == ESTABLISHED;
+                || input == ESTABLISHED
+                || input == HOLD_WAYPOINT;
         }
 
         /// <summary>
@@ -121,8 +118,7 @@ namespace AtcSimController.Controller.Departures.Models
         {
             return input == LANDING
                 || input == ON_APPROACH
-                || input == ON_FINAL
-                || input == STOPPING;
+                || input == ON_FINAL;
         }
 
         /// <summary>
@@ -163,62 +159,72 @@ namespace AtcSimController.Controller.Departures.Models
         /// <returns>Current flight phase</returns>
         public static RoutePhase DeterminePhase(Flight target)
         {
-            switch(target.Status)
+            switch(target.CurrentState)
             {
-                case Status.DEPARTURE:
-                    return READY_TAKEOFF;
-
-                case Status.HOLD:
-                    if(target.Altitude == LocalAirport.Altitude)
+                case FlightMode.APPROACH_ROLLOUT:
+                    if (target.Status == Status.DEPARTURE)
                     {
-                        // Aircraft is still on the ground
+                        return DEPARTURE;
+                    }
+                    else
+                    {
+                        return ON_APPROACH;
+                    }
+
+                case FlightMode.FREE_FLIGHT:
+                    if(target.Status == Status.DEPARTURE || target.Status == Status.TAKEOFF)
+                    {
+                        // Departing aircraft
+                        return DEPARTURE;
+                    }
+                    else
+                    {
+                        // Does the aircraft have a specific waypoint instruction?
+                        if(target.ClearedDestination != null)
+                        {
+                            return ON_APPROACH;
+                        }
+                        else
+                        {
+                            return ESTABLISHED;
+                        }
+                    }
+
+                case FlightMode.INTERCEPT:
+                    return ON_FINAL;
+
+                case FlightMode.QUEUED_TAKEOFF:
+                    if(target.Status == Status.DEPARTURE)
+                    {
+                        return READY_TAKEOFF;
+                    }
+                    else
+                    {
+                        return ROLLING;
+                    }
+
+                case FlightMode.STACK:
+                    if (target.Status == Status.DEPARTURE && target.Altitude == LocalAirport.Altitude)
+                    {
                         return LINEUP_WAIT;
                     }
                     else
                     {
-                        // Aircraft is holding at a waypoint
-                        return DEPARTURE;
+                        return HOLD_WAYPOINT;
                     }
 
-                case Status.TAKEOFF:
-                    if(target.Altitude == LocalAirport.Altitude && target.ClearedDestination.Type == WaypointType.RUNWAY)
+                case FlightMode.TAKEOFF:
+                    if (target.Altitude == LocalAirport.Altitude && target.ClearedDestination.Type == WaypointType.RUNWAY)
                     {
                         // Takeoff status with airport altitude is still rolling
                         return ROLLING;
                     }
-                    else if(target.Altitude > LocalAirport.Altitude && target.Altitude < (LocalAirport.Altitude + Constants.VERTICAL_SEPARATION_MIN_FT))
+                    else
                     {
-                        // Aircraft must be over 1000ft above field to begin executing turns
+                        // Aircraft must be 800ft+ above field to begin executing turns
+                        // Until then, it's at LIFTOFF state
                         return LIFTOFF;
                     }
-                    else
-                    {
-                        return DEPARTURE;
-                    }
-
-                case Status.ARRIVAL:
-                    if(target.ClearedDestination.Type != WaypointType.RUNWAY)
-                    {
-                        // Aircraft is being routed to the airport
-                        return ON_APPROACH;
-                    }
-                    else if(target.ClearedDestination.Type == WaypointType.RUNWAY && target.Altitude != LocalAirport.Altitude && target.ClearedAltitude == LocalAirport.Altitude)
-                    {
-                        // Runway as target indicates aircraft is on final
-                        return LANDING;
-                    }
-                    else if(target.ClearedDestination.Type == WaypointType.RUNWAY && target.Altitude == LocalAirport.Altitude && target.ClearedAltitude == LocalAirport.Altitude)
-                    {
-                        // Aircraft is coming to a stop
-                        return STOPPING;
-                    }
-                    else
-                    {
-                        return ESTABLISHED;
-                    }
-
-                case Status.LOADING:
-                    return LOADING;
 
                 default:
                     throw new ArgumentException(String.Format("Unknown Status '{0}' provided. Flight Detail: {1}", target.Status, target.ToString()));

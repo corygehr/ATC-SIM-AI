@@ -63,6 +63,7 @@
     <Compile Include="Controller\Models\Flight.cs" />
     <Compile Include="SiteReflection\Models\Airport.cs" />
     <Compile Include="SiteReflection\Models\Constants.cs" />
+    <Compile Include="SiteReflection\Models\FlightMode.cs" />
     <Compile Include="SiteReflection\Models\Status.cs" />
     <Compile Include="SiteReflection\JSArray.cs" />
     <Compile Include="SiteReflection\Models\Location.cs" />
