@@ -18,6 +18,12 @@ namespace AtcSimController.Controller
         private List<Waypoint> _activeRunways = new List<Waypoint>();
         private List<AircraftSpecification> _aircraft = new List<AircraftSpecification>();
         private Airport _airport;
+        private int _boundaryEast { get; set; }
+        private int _boundaryNorth { get; set; }
+        private int _boundarySouth { get; set; }
+        private int _boundaryWest { get; set; }
+        private int _offsetX { get; set; }
+        private int _offsetY { get; set; }
         private BrowserCapture _dataBroker;
         private IWebDriver _driver;
         private Statistics _stats = new Statistics();
@@ -49,6 +55,46 @@ namespace AtcSimController.Controller
             }
         }
         /// <summary>
+        /// X-location of Eastern Boundary
+        /// </summary>
+        public int EasternBoundary
+        {
+            get
+            {
+                return this._boundaryEast;
+            }
+        }
+        /// <summary>
+        /// Y-location of Northern Boundary
+        /// </summary>
+        public int NorthernBoundary
+        {
+            get
+            {
+                return this._boundaryNorth;
+            }
+        }
+        /// <summary>
+        /// Y-location of Southern Boundary
+        /// </summary>
+        public int SouthernBoundary
+        {
+            get
+            {
+                return this._boundarySouth;
+            }
+        }
+        /// <summary>
+        /// X-location of Western Boundary
+        /// </summary>
+        public int WesternBoundary
+        {
+            get
+            {
+                return this._boundaryWest;
+            }
+        }
+        /// <summary>
         /// All flights on the scope
         /// </summary>
         public Dictionary<string, Flight> Flights
@@ -66,6 +112,26 @@ namespace AtcSimController.Controller
             get
             {
                 return true;
+            }
+        }
+        /// <summary>
+        /// X-coordinate offset amount (in pixels)
+        /// </summary>
+        public int OffsetX
+        {
+            get
+            {
+                return this._offsetX;
+            }
+        }
+        /// <summary>
+        /// Y-coordinate offset amount (in pixels)
+        /// </summary>
+        public int OffsetY
+        {
+            get
+            {
+                return this._offsetY;
             }
         }
         /// <summary>
@@ -113,6 +179,7 @@ namespace AtcSimController.Controller
             this._driver = driver;
             this._dataBroker = new BrowserCapture(driver);
             // Get initial data sources
+            this._fetchRadarParameters();
             this._fetchWaypoints();
             this._fetchAircraftModels();
             this._fetchAirportData();
@@ -194,6 +261,19 @@ namespace AtcSimController.Controller
         }
 
         /// <summary>
+        /// Fetches scope parameters from the simulation
+        /// </summary>
+        private void _fetchRadarParameters()
+        {
+            this._offsetX = Convert.ToInt32(this._dataBroker.FetchRawJSVariable(JSVariables.OFFSET_X));
+            this._offsetY = Convert.ToInt32(this._dataBroker.FetchRawJSVariable(JSVariables.OFFSET_Y));
+            this._boundaryEast = Convert.ToInt32(this._dataBroker.FetchRawJSVariable(JSVariables.BOUNDARY_EAST));
+            this._boundaryNorth = Convert.ToInt32(this._dataBroker.FetchRawJSVariable(JSVariables.BOUNDARY_NORTH));
+            this._boundarySouth = Convert.ToInt32(this._dataBroker.FetchRawJSVariable(JSVariables.BOUNDARY_SOUTH));
+            this._boundaryWest = Convert.ToInt32(this._dataBroker.FetchRawJSVariable(JSVariables.BOUNDARY_WEST));
+        }
+
+        /// <summary>
         /// Fetch flight data from the simulator
         /// </summary>
         private void _refreshFlights()
@@ -249,6 +329,7 @@ namespace AtcSimController.Controller
                         this._aircraft[modelInd],
                         (Status)timerMode,
                         (FlightMode)fltMode,
+                        (Direction)lr,
                         this._waypoints[dest],
                         clearedDest,
                         z,

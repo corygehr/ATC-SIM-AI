@@ -129,9 +129,33 @@
     <value>intFieldElev</value>
     <comment>Airfield base altitude.</comment>
   </data>
+  <data name="BOUNDARY_EAST" xml:space="preserve">
+    <value>intTCA_Right</value>
+    <comment>Eastern Boundary X-coordinate.</comment>
+  </data>
+  <data name="BOUNDARY_NORTH" xml:space="preserve">
+    <value>intTCA_Top</value>
+    <comment>Northern Boundary Y-coordinate.</comment>
+  </data>
+  <data name="BOUNDARY_SOUTH" xml:space="preserve">
+    <value>intTCA_Bottom</value>
+    <comment>Southern Boundary Y-coordinate.</comment>
+  </data>
+  <data name="BOUNDARY_WEST" xml:space="preserve">
+    <value>intTCA_Left</value>
+    <comment>Western Boundary X-coordinate.</comment>
+  </data>
   <data name="FLIGHTS" xml:space="preserve">
     <value>G_objPlanes</value>
     <comment>Flight data array name.</comment>
+  </data>
+  <data name="OFFSET_X" xml:space="preserve">
+    <value>intXoffset</value>
+    <comment>X-coordinate offset variable name.</comment>
+  </data>
+  <data name="OFFSET_Y" xml:space="preserve">
+    <value>intYoffset</value>
+    <comment>Y-coordinate offset variable name.</comment>
   </data>
   <data name="SCORE" xml:space="preserve">
     <value>G_arrScore</value>

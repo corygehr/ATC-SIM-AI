@@ -88,11 +88,65 @@ namespace AtcSimController.SiteReflection.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to intTCA_Right.
+        /// </summary>
+        internal static string BOUNDARY_EAST {
+            get {
+                return ResourceManager.GetString("BOUNDARY_EAST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to intTCA_Top.
+        /// </summary>
+        internal static string BOUNDARY_NORTH {
+            get {
+                return ResourceManager.GetString("BOUNDARY_NORTH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to intTCA_Bottom.
+        /// </summary>
+        internal static string BOUNDARY_SOUTH {
+            get {
+                return ResourceManager.GetString("BOUNDARY_SOUTH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to intTCA_Left.
+        /// </summary>
+        internal static string BOUNDARY_WEST {
+            get {
+                return ResourceManager.GetString("BOUNDARY_WEST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to G_objPlanes.
         /// </summary>
         internal static string FLIGHTS {
             get {
                 return ResourceManager.GetString("FLIGHTS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to intXoffset.
+        /// </summary>
+        internal static string OFFSET_X {
+            get {
+                return ResourceManager.GetString("OFFSET_X", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to intYoffset.
+        /// </summary>
+        internal static string OFFSET_Y {
+            get {
+                return ResourceManager.GetString("OFFSET_Y", resourceCulture);
             }
         }
         

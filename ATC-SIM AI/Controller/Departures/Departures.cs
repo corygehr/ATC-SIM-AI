@@ -1,4 +1,5 @@
 ﻿using AtcSimController.Controller.Departures.Models;
+using AtcSimController.SiteReflection;
 using AtcSimController.SiteReflection.Models;
 
 using System;
@@ -52,13 +53,14 @@ namespace AtcSimController.Controller.Departures
         {
             // TODO
             // Categorize flights by phase to reduce number of enumerations
-
+            /*
             // Add new flights
             this._processNewFlights();
             // Route existing aircraft
             this._routeDepartures();
             // Work through the next Takeoff Queue entry
-            this._processTakeoffQueue();
+            this._processTakeoffQueue();*/
+            // Do nothing for testing purposes
         }
 
         /// <summary>
@@ -150,7 +152,7 @@ namespace AtcSimController.Controller.Departures
                 RoutePhase phase = RoutePhase.DeterminePhase(flight);
                 if (RoutePhase.IsEnroutePhase(phase))
                 {
-                    if(flight.Altitude >= Constants.HANDOFF_MIN_ALTITUDE_FT && phase == RoutePhase.HOLD_WAYPOINT)
+                    if(flight.Altitude >= (Constants.HANDOFF_ALTITUDE_THRESHOLD_FT + Scope.Airport.Altitude) && phase == RoutePhase.HOLD_WAYPOINT)
                     {
                         // Aircraft meets handoff criteria and is holding - clear to destination
                         Scope.AddDirective(Directive.ChangeDestination(flight, flight.Destination));

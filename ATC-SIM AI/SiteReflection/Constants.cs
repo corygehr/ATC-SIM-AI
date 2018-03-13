@@ -1,4 +1,4 @@
-﻿namespace AtcSimController.SiteReflection.Models
+﻿namespace AtcSimController.SiteReflection
 {
     /// <summary>
     /// Game constants
@@ -20,9 +20,12 @@
         /// </summary>
         public static readonly int HANDOFF_MIN_DISTANCE_MI = 1;
         /// <summary>
-        /// Minimum altitude for aircraft to be handed off to enroute control (in feet)
+        /// Minimum altitude above field elevation for aircraft to be handed off to enroute control (in feet)
         /// </summary>
-        public static readonly int HANDOFF_MIN_ALTITUDE_FT = 4000;
+        /// <remarks>
+        /// Game instructions state this is 4000 but game script indicates it's Field Elevation + 3500
+        /// </remarks>
+        public static readonly int HANDOFF_ALTITUDE_THRESHOLD_FT = 3500;
         /// <summary>
         /// Maximum difference between aircraft and ground level altitudes for landing clearance (in feet)
         /// </summary>

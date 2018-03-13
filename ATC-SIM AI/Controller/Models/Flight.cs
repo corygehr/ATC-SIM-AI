@@ -15,6 +15,7 @@ namespace AtcSimController.SiteReflection.Models
         private bool _conflict;
         private Waypoint _destination;
         private Waypoint _destinationTarget;
+        private Direction _direction;
         private bool _expedited;
         private FlightMode _flightMode;
         private int _heading;
@@ -35,6 +36,7 @@ namespace AtcSimController.SiteReflection.Models
         /// <param name="specs">Aircraft Operating Specifications</param>
         /// <param name="type">Flight Type</param>
         /// <param name="flightMode">Flight mode</param>
+        /// <param name="direction">Turn direction to heading</param>
         /// <param name="dest">Destination Navpoint</param>
         /// <param name="clearedDest">Current destination navpoint</param>
         /// <param name="altitude">Current altitude</param>
@@ -47,7 +49,7 @@ namespace AtcSimController.SiteReflection.Models
         /// <param name="y">Current Location on the Y-axis</param>
         /// <param name="conflict">Conflict warning</param>
         /// <param name="expedited">Current instructions are expedited</param>
-        public Flight(string callsign, string airline, string model, AircraftSpecification specs, Status type, FlightMode flightMode, Waypoint dest, Waypoint clearedDest = null, int altitude = 0, int clearedAltitude = 0, int speed = 0, int clearedSpeed = 0, int heading = 0, int clearedHeading = 0, double x = 0, double y = 0, bool conflict = false, bool expedited = false)
+        public Flight(string callsign, string airline, string model, AircraftSpecification specs, Status type, FlightMode flightMode, Direction direction, Waypoint dest, Waypoint clearedDest = null, int altitude = 0, int clearedAltitude = 0, int speed = 0, int clearedSpeed = 0, int heading = 0, int clearedHeading = 0, double x = 0, double y = 0, bool conflict = false, bool expedited = false)
         {
             this._callsign = callsign;
             this._airline = airline;
@@ -56,6 +58,7 @@ namespace AtcSimController.SiteReflection.Models
             this._expedited = expedited;
             this._type = type;
             this._flightMode = flightMode;
+            this._direction = direction;
             this._destination = dest;
             this._destinationTarget = clearedDest;
             this._altitude = altitude;
@@ -265,6 +268,17 @@ namespace AtcSimController.SiteReflection.Models
             get
             {
                 return this._altitudeTarget;
+            }
+        }
+
+        /// <summary>
+        /// Current turn direction
+        /// </summary>
+        public Direction TurnDirection
+        {
+            get
+            {
+                return this._direction;
             }
         }
 
