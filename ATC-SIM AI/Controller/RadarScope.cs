@@ -360,6 +360,9 @@ namespace AtcSimController.Controller
             // Get list of flights
             Dictionary<string, object> rawFlts = (Dictionary<string, object>)this._dataBroker.FetchRawJSVariable(JSVariables.FLIGHTS);
 
+            // Create new storage object for flights
+            Dictionary<string, Flight> flights = new Dictionary<string, Flight>();
+
             // Cast into objects
             foreach (var flt in rawFlts)
             {
@@ -421,9 +424,12 @@ namespace AtcSimController.Controller
                         y
                     );
 
-                    this._flightDict[flightNum] = newFlt;
+                    flights[flightNum] = newFlt;
                 }
             }
+
+            // Replace local flights object
+            this._flightDict = flights;
         }
 
         /// <summary>

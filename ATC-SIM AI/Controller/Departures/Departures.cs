@@ -51,42 +51,54 @@ namespace AtcSimController.Controller.Departures
 
         public override void DoRouting()
         {
-            // TODO
             // Categorize flights by phase to reduce number of enumerations
-            /*
-            // Add new flights
-            this._processNewFlights();
+            // Group by control
+            List<Flight> ground = new List<Flight>();
+            List<Flight> departure = new List<Flight>();
+            List<Flight> tower = new List<Flight>();
+
+            foreach(KeyValuePair<string, Flight> flight in Scope.Flights)
+            {
+                RoutePhase flightPhase = RoutePhase.DeterminePhase(flight.Value);
+                if (RoutePhase.IsEnroutePhase(flightPhase))
+                {
+                    departure.Add(flight.Value);
+                }
+                else if (!this._takeoffQueue.Contains(flight.Value) && flightPhase == RoutePhase.READY_TAKEOFF)
+                {
+                    ground.Add(flight.Value);
+                }
+                else
+                {
+                    tower.Add(flight.Value);
+                }
+            }
+
+            // Queue flights for takeoff
+            this._processNewFlights(ground);
             // Route existing aircraft
-            this._routeDepartures();
-            // Work through the next Takeoff Queue entry
-            this._processTakeoffQueue();*/
-            // Do nothing for testing purposes
+            this._routeDepartures(departure);
+            // Process takeoff queue
+            this._processTakeoffQueue();
         }
 
         /// <summary>
         /// Pushes new flights to the takeoff queue
         /// </summary>
-        private void _processNewFlights()
+        /// <param name="flights">Flights to queue</param>
+        private void _processNewFlights(List<Flight> flights)
         {
             // Add new flights to the takeoff queue
-            foreach (KeyValuePair<string, Flight> entry in Scope.Flights)
+            foreach (Flight flight in flights)
             {
-                Flight flight = entry.Value;
-                if (!this._takeoffQueue.Contains(flight) && RoutePhase.DeterminePhase(flight) == RoutePhase.READY_TAKEOFF)
-                {
-                    // Add to queue for takeoff runway
-                    try
-                    {
-                        this._takeoffQueue.Enqueue(flight);
-                        Console.WriteLine(String.Format("[TOWER] {0} queued for takeoff, Runway {1} (number {2}).", flight.Callsign, flight.ClearedDestination.Name, this._takeoffQueue.Count));
-                    }
-                    catch (Exception) { }
-                }
+                // Add to queue for takeoff runway
+                this._takeoffQueue.Enqueue(flight);
+                Console.WriteLine(String.Format("[TOWER] {0} queued for takeoff, Runway {1} (number {2}).", flight.Callsign, flight.ClearedDestination.Name, this._takeoffQueue.Count));
             }
         }
 
         /// <summary>
-        /// Processes the next takeoff in the queue
+        /// Processes the takeoff queue
         /// </summary>
         private void _processTakeoffQueue()
         {
@@ -144,27 +156,20 @@ namespace AtcSimController.Controller.Departures
         /// <summary>
         /// Routes aircraft which have already departed
         /// </summary>
-        private void _routeDepartures()
+        /// <param name="flights">Enroute Flights</param>
+        private void _routeDepartures(List<Flight> flights)
         {
-            foreach(KeyValuePair<string, Flight> flightEntry in Scope.Flights)
+            foreach(Flight flight in flights)
             {
-                Flight flight = flightEntry.Value;
                 RoutePhase phase = RoutePhase.DeterminePhase(flight);
                 if (RoutePhase.IsEnroutePhase(phase))
                 {
-                    if(flight.Altitude >= (Constants.HANDOFF_ALTITUDE_THRESHOLD_FT + Scope.Airport.Altitude) && phase == RoutePhase.HOLD_WAYPOINT)
+                    // Ensure flight is currently enroute to destination
+                    if(flight.ClearedDestination != flight.Destination)
                     {
-                        // Aircraft meets handoff criteria and is holding - clear to destination
                         Scope.AddDirective(Directive.ChangeDestination(flight, flight.Destination));
                         Scope.ExecuteDirectives();
                         Console.WriteLine(String.Format("[DEPARTURE] {0} cleared to {1}.", flight.Callsign, flight.Destination.Name));
-                    }
-                    else if(flight.ClearedDestination == null || flight.ClearedDestination.Type == WaypointType.RUNWAY)
-                    {
-                        // Aircraft has already intercepted destination or is following runway heading
-                        Scope.AddDirective(Directive.Hold(flight, flight.Destination));
-                        Scope.ExecuteDirectives();
-                        Console.WriteLine(String.Format("[DEPARTURE] {0} hold at {1}.", flight.Callsign, flight.Destination.Name));
                     }
                 }
             }
