@@ -6,7 +6,7 @@ namespace AtcSimController.SiteReflection.Models
     /// <summary>
     /// Flight object
     /// </summary>
-    public class Flight : IEqualityComparer<Flight>, IEquatable<Flight>
+    public class Flight : ScopeObject, IEqualityComparer<Flight>, IEquatable<Flight>
     {
         private string _airline;
         private int _altitude;
@@ -20,7 +20,6 @@ namespace AtcSimController.SiteReflection.Models
         private FlightMode _flightMode;
         private int _heading;
         private int _headingTarget;
-        private Location _location;
         private string _model;
         private AircraftSpecification _specs;
         private int _speed;
@@ -49,7 +48,7 @@ namespace AtcSimController.SiteReflection.Models
         /// <param name="y">Current Location on the Y-axis</param>
         /// <param name="conflict">Conflict warning</param>
         /// <param name="expedited">Current instructions are expedited</param>
-        public Flight(string callsign, string airline, string model, AircraftSpecification specs, Status type, FlightMode flightMode, Direction direction, Waypoint dest, Waypoint clearedDest = null, int altitude = 0, int clearedAltitude = 0, int speed = 0, int clearedSpeed = 0, int heading = 0, int clearedHeading = 0, double x = 0, double y = 0, bool conflict = false, bool expedited = false)
+        public Flight(string callsign, string airline, string model, AircraftSpecification specs, Status type, FlightMode flightMode, Direction direction, Waypoint dest, Waypoint clearedDest = null, int altitude = 0, int clearedAltitude = 0, int speed = 0, int clearedSpeed = 0, int heading = 0, int clearedHeading = 0, double x = 0, double y = 0, bool conflict = false, bool expedited = false) : base(x, y)
         {
             this._callsign = callsign;
             this._airline = airline;
@@ -67,7 +66,6 @@ namespace AtcSimController.SiteReflection.Models
             this._speedTarget = clearedSpeed;
             this._heading = heading;
             this._headingTarget = clearedHeading;
-            this._location = new Location(x, y);
             this._conflict = conflict;
         }
 
@@ -224,17 +222,6 @@ namespace AtcSimController.SiteReflection.Models
             get
             {
                 return this._heading;
-            }
-        }
-
-        /// <summary>
-        /// Returns the current location for this flight
-        /// </summary>
-        public Location Location
-        {
-            get
-            {
-                return this._location;
             }
         }
 

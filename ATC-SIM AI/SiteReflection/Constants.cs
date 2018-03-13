@@ -39,6 +39,10 @@
         /// </summary>
         public static readonly int LATERAL_SEPARATION_MIN_MI = 3;
         /// <summary>
+        /// Minimum lateral separation of aircraft (pixels)
+        /// </summary>
+        public static readonly int LATERAL_SEPARATION_MIN_PX = 75;
+        /// <summary>
         /// Minimum vertical separation of aircraft (feet)
         /// </summary>
         public static readonly int VERTICAL_SEPARATION_MIN_FT = 1000;

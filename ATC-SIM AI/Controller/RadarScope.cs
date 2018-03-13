@@ -117,6 +117,9 @@ namespace AtcSimController.Controller
         /// <summary>
         /// X-coordinate offset amount (in pixels)
         /// </summary>
+        /// <remarks>
+        /// This only seems to apply when computing the distance from a Flight to Waypoint
+        /// </remarks>
         public int OffsetX
         {
             get
@@ -127,6 +130,9 @@ namespace AtcSimController.Controller
         /// <summary>
         /// Y-coordinate offset amount (in pixels)
         /// </summary>
+        /// <remarks>
+        /// This only seems to apply when computing the distance from a Flight to Waypoint
+        /// </remarks>
         public int OffsetY
         {
             get
@@ -195,6 +201,60 @@ namespace AtcSimController.Controller
         public void AddDirective(Directive directive)
         {
             this.PendingDirectives.Enqueue(directive);
+        }
+
+        /// <summary>
+        /// Determines the distance between two objects on the <see cref="RadarScope"/>
+        /// </summary>
+        /// <param name="a">Start object</param>
+        /// <param name="b">End object</param>
+        /// <returns>Distance between objects</returns>
+        /// <remarks>
+        /// This is provided to the user because the simulator has its own function to compute this. Hence,
+        /// this function mirrors it to give controllers a value which is consistent with what the 
+        /// simulation would provide.
+        /// </remarks>
+        public double Distance(Flight a, Waypoint b)
+        {
+            return Math.Sqrt(
+                Math.Pow(a.Location.x + OffsetX - b.Location.y, 2) + Math.Pow((a.Location.y + OffsetY - b.Location.y), 2)
+            );
+        }
+
+        /// <summary>
+        /// Determines the distance between two objects on the <see cref="RadarScope"/>
+        /// </summary>
+        /// <param name="a">Start object</param>
+        /// <param name="b">End object</param>
+        /// <returns>Distance between objects</returns>
+        /// <remarks>
+        /// This is provided to the user because the simulator has its own function to compute this. Hence,
+        /// this function mirrors it to give controllers a value which is consistent with what the 
+        /// simulation would provide.
+        /// </remarks>
+        public double Distance(Flight a, Flight b)
+        {
+            return Math.Sqrt(
+                Math.Pow(a.Location.x - b.Location.y, 2) + Math.Pow((a.Location.y - b.Location.y), 2)
+            );
+        }
+
+        /// <summary>
+        /// Determines the distance between two objects on the <see cref="RadarScope"/>
+        /// </summary>
+        /// <param name="a">Start object</param>
+        /// <param name="b">End object</param>
+        /// <returns>Distance between objects</returns>
+        /// <remarks>
+        /// This is provided to the user because the simulator has its own function to compute this. Hence,
+        /// this function mirrors it to give controllers a value which is consistent with what the 
+        /// simulation would provide.
+        /// </remarks>
+        public double Distance(Waypoint a, Waypoint b)
+        {
+            return Math.Sqrt(
+                Math.Pow(a.Location.x - b.Location.y, 2) + Math.Pow((a.Location.y - b.Location.y), 2)
+            );
         }
 
         /// <summary>

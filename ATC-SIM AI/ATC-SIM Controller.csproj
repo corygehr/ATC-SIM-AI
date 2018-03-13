@@ -60,11 +60,12 @@
     </Compile>
     <Compile Include="SiteReflection\Models\AircraftSpecification.cs" />
     <Compile Include="Controller\Directive.cs" />
-    <Compile Include="Controller\Models\Flight.cs" />
+    <Compile Include="SiteReflection\Models\Flight.cs" />
     <Compile Include="SiteReflection\Models\Airport.cs" />
     <Compile Include="SiteReflection\Constants.cs" />
     <Compile Include="SiteReflection\Models\Direction.cs" />
     <Compile Include="SiteReflection\Models\FlightMode.cs" />
+    <Compile Include="SiteReflection\Models\ScopeObject.cs" />
     <Compile Include="SiteReflection\Models\Status.cs" />
     <Compile Include="SiteReflection\JSArray.cs" />
     <Compile Include="SiteReflection\Models\Location.cs" />

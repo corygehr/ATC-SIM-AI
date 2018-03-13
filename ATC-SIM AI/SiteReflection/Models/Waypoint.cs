@@ -5,10 +5,9 @@ namespace AtcSimController.SiteReflection.Models
     /// <summary>
     /// Waypoint object on the Radar Screen
     /// </summary>
-    public sealed class Waypoint : IEquatable<Waypoint>
+    public sealed class Waypoint : ScopeObject, IEquatable<Waypoint>
     {
         private int _heading;
-        private Location _location;
         private string _name;
         private WaypointType _type;
 
@@ -20,11 +19,10 @@ namespace AtcSimController.SiteReflection.Models
         /// <param name="x">Waypoint x location</param>
         /// <param name="y">Waypoint y location</param>
         /// <param name="heading">Heading (runway)</param>
-        public Waypoint(string name, WaypointType type, double x, double y, int heading = -1)
+        public Waypoint(string name, WaypointType type, double x, double y, int heading = -1) : base(x, y)
         {
             this._heading = heading;
             this._name = name;
-            this._location = new Location(x, y);
             this._type = type;
         }
 
@@ -35,11 +33,10 @@ namespace AtcSimController.SiteReflection.Models
         /// <param name="type">Waypoint type</param>
         /// <param name="location">Waypoint Location object</param>
         /// <param name="heading">Heading (runway)</param>
-        public Waypoint(string name, WaypointType type, Location location, int heading = -1)
+        public Waypoint(string name, WaypointType type, Location location, int heading = -1) : base(location)
         {
             this._heading = heading;
             this._name = name;
-            this._location = location;
             this._type = type;
         }
 
@@ -51,17 +48,6 @@ namespace AtcSimController.SiteReflection.Models
             get
             {
                 return this._heading;
-            }
-        }
-
-        /// <summary>
-        /// Returns the Location object for this Navpoint
-        /// </summary>
-        public Location Location
-        {
-            get
-            {
-                return this._location;
             }
         }
 
