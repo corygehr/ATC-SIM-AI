@@ -17,6 +17,10 @@ namespace AtcSimController.Controller.Departures
         /// </summary>
         private string _currentTakeoff = null;
         /// <summary>
+        /// Departed flights
+        /// </summary>
+        private List<string> _departures = new List<string>();
+        /// <summary>
         /// Aircraft holding on runway(s) for takeoff
         /// </summary>
         private Dictionary<string, string> _runwayReservations = new Dictionary<string, string>();

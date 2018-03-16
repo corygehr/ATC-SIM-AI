@@ -204,17 +204,6 @@ namespace AtcSimController.SiteReflection.Models
         }
 
         /// <summary>
-        /// Returns true if the current instructions are to be expedited
-        /// </summary>
-        public bool IsExpedited
-        {
-            get
-            {
-                return this._expedited;
-            }
-        }
-
-        /// <summary>
         /// Returns the current heading of this flight
         /// </summary>
         public int Heading
@@ -224,7 +213,29 @@ namespace AtcSimController.SiteReflection.Models
                 return this._heading;
             }
         }
+
+        /// <summary>
+        /// Returns true if the current instructions are to be expedited
+        /// </summary>
+        public bool IsExpedited
+        {
+            get
+            {
+                return this._expedited;
+            }
+        }
         
+        /// <summary>
+        /// Aircraft model
+        /// </summary>
+        public string Model
+        {
+            get
+            {
+                return this._model;
+            }
+        }
+
         /// <summary>
         /// Returns the current speed of this flight
         /// </summary>
@@ -269,11 +280,6 @@ namespace AtcSimController.SiteReflection.Models
             }
         }
 
-        public override string ToString()
-        {
-            return this._callsign;
-        }
-
         public bool Equals(Flight other)
         {
             return this.Equals(this, other);
@@ -288,6 +294,11 @@ namespace AtcSimController.SiteReflection.Models
         {
             // In this application, flights are equivalent if they have the same callsign - period.
             return obj.Callsign.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return this._callsign;
         }
     }
 }
