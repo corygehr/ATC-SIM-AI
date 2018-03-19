@@ -50,6 +50,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\Departures\Models\CollisionRisk.cs" />
+    <Compile Include="Controller\Departures\Models\CollisionRiskCriteria.cs" />
+    <Compile Include="Controller\Departures\Models\CollisionRiskScale.cs" />
     <Compile Include="Controller\TrafficController.cs" />
     <Compile Include="Controller\Departures\Departures.cs" />
     <Compile Include="AIEntry.cs" />

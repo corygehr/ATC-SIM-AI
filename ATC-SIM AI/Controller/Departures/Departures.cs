@@ -83,6 +83,18 @@ namespace AtcSimController.Controller.Departures
         }
 
         /// <summary>
+        /// Checks the current risk of conflict for a flight
+        /// </summary>
+        /// <param name="flight"></param>
+        private void _getConflictRisk(Flight flight)
+        {
+            if(flight.ConflictWarning)
+            {
+
+            }
+        }
+
+        /// <summary>
         /// Pushes new flights to the takeoff queue
         /// </summary>
         /// <param name="flights">Flights to queue</param>
