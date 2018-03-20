@@ -4,6 +4,7 @@ using AtcSimController.SiteReflection.Models;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AtcSimController.Controller.Departures
 {
@@ -80,18 +81,6 @@ namespace AtcSimController.Controller.Departures
             this._routeDepartures(departure);
             // Process takeoff queue
             this._processTakeoffQueue();
-        }
-
-        /// <summary>
-        /// Checks the current risk of conflict for a flight
-        /// </summary>
-        /// <param name="flight"></param>
-        private void _getConflictRisk(Flight flight)
-        {
-            if(flight.ConflictWarning)
-            {
-
-            }
         }
 
         /// <summary>
@@ -173,16 +162,40 @@ namespace AtcSimController.Controller.Departures
         {
             foreach(Flight flight in flights)
             {
-                RoutePhase phase = RoutePhase.DeterminePhase(flight);
-                if (RoutePhase.IsEnroutePhase(phase))
+                // Get risk ratings for flight
+                List<CollisionRisk> traffic = new List<CollisionRisk>();
+
+                foreach(Flight target in flights)
+                {
+                    if(target != flight)
+                    {
+                        CollisionRisk calculatedRisk = CollisionRisk.CalculateRisk(Scope, flight, target);
+                        
+                        if(calculatedRisk.Risk == CollisionRiskScale.HIGH_RISK || calculatedRisk.Risk == CollisionRiskScale.MED_RISK)
+                        {
+                            traffic.Add(calculatedRisk);
+                        }
+                    }
+                }
+                
+                // Normal routing if no risks exist
+                if (traffic.Count() == 0)
                 {
                     // Ensure flight is currently enroute to destination
-                    if(flight.ClearedDestination != flight.Destination)
+                    if (flight.ClearedDestination != flight.Destination)
                     {
                         Scope.AddDirective(Directive.ChangeDestination(flight, flight.Destination));
                         Scope.ExecuteDirectives();
                         Console.WriteLine(String.Format("[DEPARTURE] {0} cleared to {1}.", flight.Callsign, flight.Destination.Name));
                     }
+                }
+                else
+                {
+                    // Execute actions to avoid collision
+                    Console.WriteLine(String.Format("[DEPARTURE] {0} has {1} nearby flights to avoid.", flight, traffic.Count()));
+
+                    // Try changing altitudes to avert disaster
+
                 }
             }
         }
